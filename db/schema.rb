@@ -10,18 +10,98 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226224913) do
+ActiveRecord::Schema.define(version: 20180228005528) do
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "street"
+    t.integer "number"
+    t.string "cep"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "neighborhood_id"
+    t.bigint "city_id"
+    t.bigint "state_id"
+    t.index ["city_id"], name: "index_addresses_on_city_id"
+    t.index ["neighborhood_id"], name: "index_addresses_on_neighborhood_id"
+    t.index ["state_id"], name: "index_addresses_on_state_id"
+  end
+
+  create_table "cities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
-    t.string "surname"
-    t.string "email"
-    t.string "telefone"
-    t.string "whatsapp"
-    t.string "cpf"
-    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "state_id"
+    t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "neighborhoods", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_neighborhoods_on_city_id"
+  end
+
+  create_table "organizations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "states", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "initials"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_seeds", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "registration"
+    t.string "organization"
+    t.string "role"
+    t.string "cpf"
+    t.string "simple_address"
+  end
+
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "registration", null: false
+    t.string "email", null: false
+    t.string "name", null: false
+    t.string "nickname"
+    t.string "cpf", null: false
+    t.string "landline"
+    t.string "cellphone"
+    t.string "whatsapp"
+    t.string "simple_address", null: false
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "organization_id"
+    t.bigint "role_id"
+    t.bigint "address_id"
+    t.index ["address_id"], name: "index_users_on_address_id"
+    t.index ["cpf"], name: "index_users_on_cpf"
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["organization_id"], name: "index_users_on_organization_id"
+    t.index ["registration"], name: "index_users_on_registration"
+    t.index ["role_id"], name: "index_users_on_role_id"
+  end
+
+  add_foreign_key "addresses", "cities"
+  add_foreign_key "addresses", "neighborhoods"
+  add_foreign_key "addresses", "states"
+  add_foreign_key "cities", "states"
+  add_foreign_key "neighborhoods", "cities"
+  add_foreign_key "users", "addresses"
+  add_foreign_key "users", "organizations"
+  add_foreign_key "users", "roles"
 end

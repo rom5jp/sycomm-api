@@ -25,6 +25,17 @@ namespace :populate_db do
     puts " ----- FIM ------"
   end
 
+  desc "Insert into 'users' from select from 'user_seeds'"
+  task insert_into_users_from_select_userseeds: :environment do
+    query = "INSERT INTO users (name, cpf, registration)
+              SELECT name, cpf, registration
+              FROM user_seeds;"
+
+    ActiveRecord::Base.connection.execute(query)
+
+    puts " ----- FIM ------"
+  end
+
   desc "Populate 'roles' table"
   task populate_roles: :environment do
     roles = [

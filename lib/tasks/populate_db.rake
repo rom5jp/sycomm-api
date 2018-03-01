@@ -1,25 +1,31 @@
 
 namespace :populate_db do
-  desc "Alimenta o banco a partir de um arquivo .csv"
+  desc 'All'
+  task all: [:import_from_csv, :populate_roles, :populate_organizations]
+  
+  desc "It populates database from a .csv file"
   task import_from_csv: :environment do
-    require 'csv'
+    csv_filename = 'import_users_from_csv.sql'
 
-    csv_text = File.read('/home/romero/Documentos/Sycomm/pb.csv')
-    csv = CSV.parse(csv_text, :headers => true)
+    # require 'csv'
+
+    # csv_text = File.read('/home/romero/Documentos/Sycomm/pb.csv')
+    # csv = CSV.parse(csv_text, :headers => true)
     
-    puts " ----- INICIANDO SEED DE #{csv.size} REGISTROS ------"
+    # puts " ----- INICIANDO SEED DE #{csv.size} REGISTROS ------"
 
-    csv.each_with_index do |row, index|
-      puts " > Criando usuário de número #{index}"
-      User.create!(row.to_hash)
-      # break
-      # puts row.to_hash
-    end
-
+    # csv.each_with_index do |row, index|
+    #   puts " > Criando usuário de número #{index}"
+    #   User.create!(row.to_hash)
+    # end
+    
+    puts " --- Importing data from #{File.expand_path(csv_filename, '../sycomm-api/db/scripts')}..."
+    ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
+    
     puts " ----- FIM ------"
   end
 
-  desc "Popula a tabela roles"
+  desc "Populate 'roles' table"
   task populate_roles: :environment do
     roles = [
       'Aposentado',
@@ -44,8 +50,8 @@ namespace :populate_db do
     puts " --- FIM ---"
   end
   
-  desc "Popula a tabela organizations"
-  task populate_roles: :environment do
+  desc "Populates 'organizations' table"
+  task populate_organizations: :environment do
     orgs = [
       'PBPREV - INATIVOS',
       'PBPREV - PENSIONISTAS',

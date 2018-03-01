@@ -91,8 +91,8 @@ namespace :populate_db do
 
     puts "--- Serão adicionados #{orgs.length} organizations: #{orgs.to_s}"
 
-    roles.each do |r|
-      Role.create(name: r)
+    orgs.each do |r|
+      Organization.create(name: r)
     end
 
     puts " --- FIM ---"

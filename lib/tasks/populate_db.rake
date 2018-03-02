@@ -1,7 +1,7 @@
 
 namespace :populate_db do
   desc 'All'
-  task all: [:import_from_csv, :populate_roles, :populate_organizations]
+  task all: [:import_from_csv, :insert_into_users_from_select_userseeds, :populate_roles, :populate_organizations]
   
   desc "It populates database from a .csv file"
   task import_from_csv: :environment do
@@ -19,25 +19,28 @@ namespace :populate_db do
     #   User.create!(row.to_hash)
     # end
     
-    puts " --- Importing data from #{File.expand_path(csv_filename, '../sycomm-api/db/scripts')}..."
+    puts "> Importing data from #{File.expand_path(csv_filename, '../sycomm-api/db/scripts')}..."
     ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
     
-    puts " ----- FIM ------"
+    puts " >> END\n "
   end
 
   desc "Insert into 'users' from select from 'user_seeds'"
   task insert_into_users_from_select_userseeds: :environment do
-    query = "INSERT INTO users (name, cpf, registration)
-              SELECT name, cpf, registration
+    puts "> Inserting into 'users' from select from 'user_seeds'..."
+    query = "INSERT INTO users (name, cpf, registration, type, created_at, updated_at)
+              SELECT name, cpf, registration, 'Customer', NOW(), NOW()
               FROM user_seeds;"
 
+    # ActiveRecord::Base.connection.execute("INSERT INTO ")
     ActiveRecord::Base.connection.execute(query)
 
-    puts " ----- FIM ------"
+    puts ">> END\n"
   end
 
   desc "Populate 'roles' table"
   task populate_roles: :environment do
+    puts "> Populating 'roles' table..."
     roles = [
       'Aposentado',
       'Aposentado/Pensionista',
@@ -52,17 +55,17 @@ namespace :populate_db do
       'Estagiario'
     ]
 
-    puts "--- Serão adicionados #{roles.length} roles: #{roles.to_s}"
-
     roles.each do |r|
       Role.create(name: r)
     end
 
-    puts " --- FIM ---"
+    puts ">> END\n"
   end
   
   desc "Populates 'organizations' table"
   task populate_organizations: :environment do
+    puts "> Populating 'organizations' table"
+
     orgs = [
       'PBPREV - INATIVOS',
       'PBPREV - PENSIONISTAS',
@@ -96,16 +99,10 @@ namespace :populate_db do
       'SEC ACOMPANHAM. ACOES GOVERNAM'
     ]
 
-      orgs.each do |o|
-        Organization.create(name: o)
-      end
-
-    puts "--- Serão adicionados #{orgs.length} organizations: #{orgs.to_s}"
-
-    orgs.each do |r|
-      Organization.create(name: r)
+    orgs.each do |o|
+      Organization.create(name: o)
     end
 
-    puts " --- FIM ---"
+    puts ">> END\n"
   end
 end

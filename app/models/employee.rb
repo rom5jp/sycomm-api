@@ -1,2 +1,2 @@
-class Employee < User
+class Employee < Master
 end

@@ -22,7 +22,7 @@ namespace :populate_db do
     puts "> Importing data from #{File.expand_path(csv_filename, '../sycomm-api/db/scripts')}..."
     ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
     
-    puts " >> END\n "
+    puts ">> END\n"
   end
 
   desc "Insert into 'users' from select from 'user_seeds'"

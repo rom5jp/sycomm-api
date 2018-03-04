@@ -1,10 +1,12 @@
 require 'api_version_constraint'
 
 Rails.application.routes.draw do
-  namespace :api, defaults: { format: :json }, constraints: { subdomain: false }, path: '/' do
-    namespace :v1, constraints: ApiVersionConstraint.new(version: 1, default: true) do
+  # devise_for :users
+
+  namespace :api, path: '/', defaults: { format: :json }, constraints: { subdomain: 'api' } do
+    namespace :v1, path: '/', constraints: ApiVersionConstraint.new(version: 1, default: false) do
       resources :masters
-      resources :employess
+      resources :employees
       resources :customers
     end
   end

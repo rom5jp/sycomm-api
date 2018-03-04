@@ -1,5 +1,5 @@
--- USE sycomm_development;
--- DROP PROCEDURE IF EXISTS update_users_roles;
+USE sycomm_development;
+DROP PROCEDURE IF EXISTS update_users_roles;
 
 DELIMITER $$
 
@@ -11,20 +11,20 @@ BEGIN
   DECLARE c_roles CURSOR FOR 
     SELECT us.registration, r.id as role_id
     FROM user_seeds us 
-    JOIN users u
-    JOIN roles r
-    WHERE us.role = r.name
-    AND us.name = u.name;
+    INNER JOIN users u
+      ON us.name = u.name
+    INNER JOIN roles r
+      ON us.role = r.name
+    WHERE u.type = 'Customer' limit 1000;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
   OPEN c_roles;
 
   read_loop: LOOP
     FETCH c_roles INTO v_registration, v_role_id;
-    SELECT v_role_id;
     
     UPDATE users
-		SET role_id = v_role_id
+    SET role_id = v_role_id
     WHERE registration LIKE v_registration;
 
     IF done THEN

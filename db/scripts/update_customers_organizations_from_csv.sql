@@ -1,5 +1,5 @@
--- USE sycomm_development;
--- DROP PROCEDURE IF EXISTS update_users_organizations;
+USE sycomm_development;
+DROP PROCEDURE IF EXISTS update_users_organizations;
 
 DELIMITER $$
 
@@ -11,10 +11,11 @@ BEGIN
   DECLARE c_orgs CURSOR FOR 
     SELECT us.registration, o.id as org_id
     FROM user_seeds us 
-    JOIN users u
-    JOIN organizations o
-    WHERE us.organization = o.name
-    AND us.name = u.name;
+    INNER JOIN users u
+      ON us.name = u.name
+    INNER JOIN organizations o
+      ON us.organization = o.name
+    WHERE u.type = 'Customer' limit 1000;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
   OPEN c_orgs;
@@ -23,7 +24,7 @@ BEGIN
     FETCH c_orgs INTO v_registration, v_org_id;
     
     UPDATE users
-		SET organization_id = v_org_id
+    SET organization_id = v_org_id
     WHERE registration LIKE v_registration;
 
     IF done THEN
@@ -35,5 +36,3 @@ BEGIN
 END$$
 
 DELIMITER ;
-
-call update_users_organizations();

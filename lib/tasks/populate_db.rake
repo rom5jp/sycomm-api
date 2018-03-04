@@ -1,7 +1,12 @@
 
 namespace :populate_db do
   desc 'All'
-  task all: [:import_from_csv, :insert_into_users_from_select_userseeds, :populate_roles, :populate_organizations]
+  task all: [
+    :import_from_csv, 
+    :insert_into_users_from_select_userseeds, 
+    :populate_roles, :populate_organizations, 
+    :update_users_roles_from_csv, :update_users_organizations_from_csv
+  ]
   
   desc "It populates database from a .csv file"
   task import_from_csv: :environment do
@@ -102,6 +107,32 @@ namespace :populate_db do
     orgs.each do |o|
       Organization.create(name: o)
     end
+
+    puts ">> END\n"
+  end
+
+  desc "Updates all customers role reference with synced value from csv file"
+  task update_users_roles_from_csv: :environment do
+    puts "> Updating customers role reference with synced value from csv file..."
+    
+    csv_filename = 'update_customers_roles_from_csv.sql'
+
+    ActiveRecord::Base.connection.execute("DROP PROCEDURE IF EXISTS update_users_roles;")
+    ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
+    ActiveRecord::Base.connection.execute("CALL update_users_roles();")
+
+    puts ">> END\n"
+  end
+
+  desc "Updates all customers organization reference with synced value from csv file"
+  task update_users_organizations_from_csv: :environment do
+    puts "> Updating customers organization reference with synced value from csv file..."
+    
+    csv_filename = 'update_customers_organizations_from_csv.sql'
+
+    ActiveRecord::Base.connection.execute("DROP PROCEDURE IF EXISTS update_users_organizations;")
+    ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
+    ActiveRecord::Base.connection.execute("CALL update_users_organizations();")
 
     puts ">> END\n"
   end

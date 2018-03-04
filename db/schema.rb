@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228005528) do
+ActiveRecord::Schema.define(version: 20180304040517) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "street", null: false
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20180228005528) do
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "registration"
-    t.string "email"
+    t.string "email", default: "", null: false
     t.string "name", null: false
     t.string "surname"
     t.string "nickname"
@@ -89,11 +89,21 @@ ActiveRecord::Schema.define(version: 20180228005528) do
     t.bigint "organization_id"
     t.bigint "role_id"
     t.bigint "address_id"
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.index ["address_id"], name: "index_users_on_address_id"
     t.index ["cpf"], name: "index_users_on_cpf"
     t.index ["email"], name: "index_users_on_email"
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["registration"], name: "index_users_on_registration"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
   end
 

@@ -1,38 +1,29 @@
-USE sycomm_development;
-DROP PROCEDURE IF EXISTS update_users_roles;
-
-DELIMITER $$
-
-CREATE PROCEDURE update_users_roles()
-BEGIN
-  DECLARE done TINYINT DEFAULT FALSE;
-  DECLARE v_registration VARCHAR(255);
-  DECLARE v_role_id BIGINT(20);
-  DECLARE c_roles CURSOR FOR 
+﻿DO $$DECLARE
+  v_registration VARCHAR(255);
+  v_role_id INTEGER;
+  c_roles CURSOR FOR 
     SELECT us.registration, r.id as role_id
     FROM user_seeds us 
     INNER JOIN users u
-      ON us.name = u.name
+      ON us.registration = u.registration
     INNER JOIN roles r
       ON us.role = r.name
-    WHERE u.type = 'Customer' limit 1000;
-  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
+    WHERE u.type = 'Customer';
+BEGIN
   OPEN c_roles;
 
-  read_loop: LOOP
+  LOOP
     FETCH c_roles INTO v_registration, v_role_id;
+    EXIT WHEN NOT FOUND;
+
+    -- raise notice 'v_reg: %', v_registratoin;
+    -- raise notice 'v_role_id: %', v_role_id;
+    -- raise notice '---';
     
     UPDATE users
     SET role_id = v_role_id
     WHERE registration LIKE v_registration;
-
-    IF done THEN
-      LEAVE read_loop;
-    END IF;
   END LOOP;
 
   CLOSE c_roles;
-END$$
-
-DELIMITER ;
+END$$;

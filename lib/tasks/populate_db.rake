@@ -33,8 +33,8 @@ namespace :populate_db do
   desc "Insert into 'users' from select from 'user_seeds'"
   task insert_into_users_from_select_userseeds: :environment do
     puts "> Inserting into 'users' from select from 'user_seeds'..."
-    query = "INSERT INTO users (name, cpf, registration, type, created_at, updated_at)
-              SELECT name, cpf, registration, 'Customer', NOW(), NOW()
+    query = "INSERT INTO users (name, cpf, registration, type, simple_address, created_at, updated_at)
+              SELECT name, cpf, registration, 'Customer', simple_address, NOW(), NOW()
               FROM user_seeds;"
 
     # ActiveRecord::Base.connection.execute("INSERT INTO ")
@@ -117,9 +117,7 @@ namespace :populate_db do
     
     csv_filename = 'update_customers_roles_from_csv.sql'
 
-    ActiveRecord::Base.connection.execute("DROP PROCEDURE IF EXISTS update_users_roles;")
     ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
-    ActiveRecord::Base.connection.execute("CALL update_users_roles();")
 
     puts ">> END\n"
   end
@@ -130,9 +128,7 @@ namespace :populate_db do
     
     csv_filename = 'update_customers_organizations_from_csv.sql'
 
-    ActiveRecord::Base.connection.execute("DROP PROCEDURE IF EXISTS update_users_organizations;")
     ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
-    ActiveRecord::Base.connection.execute("CALL update_users_organizations();")
 
     puts ">> END\n"
   end

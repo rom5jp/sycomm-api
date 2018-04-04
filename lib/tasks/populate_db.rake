@@ -11,18 +11,6 @@ namespace :populate_db do
   desc "It populates database from a .csv file"
   task import_from_csv: :environment do
     csv_filename = 'import_users_from_csv.sql'
-
-    # require 'csv'
-
-    # csv_text = File.read('/home/romero/Documentos/Sycomm/pb.csv')
-    # csv = CSV.parse(csv_text, :headers => true)
-    
-    # puts " ----- INICIANDO SEED DE #{csv.size} REGISTROS ------"
-
-    # csv.each_with_index do |row, index|
-    #   puts " > Criando usuário de número #{index}"
-    #   User.create!(row.to_hash)
-    # end
     
     puts "> Importing data from #{File.expand_path(csv_filename, '../sycomm-api/db/scripts')}..."
     ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))

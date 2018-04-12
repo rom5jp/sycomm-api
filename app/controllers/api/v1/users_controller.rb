@@ -3,24 +3,39 @@ class Api::V1::UsersController < ApplicationController
   # before_action :authenticate_with_token!, only: [:update, :destroy]
 
   def index
+  end
+
+  def get_all_paginated
+    page_number = params[:page_number]
+    per_page = params[:per_page]
+
+    puts ">>> page_number: #{page_number}"
+    puts ">>> per_page: #{per_page}"
+
     users = User.joins('INNER JOIN roles ON roles.id = users.role_id')
                 .joins('INNER JOIN organizations ON organizations.id = users.organization_id')
                 .select(
-                  'users.id',
-                  'users.name',
-                  'users.email',
-                  'users.registration',
-                  'users.cpf',
-                  'users.landline',
-                  'users.cellphone',
-                  'users.whatsapp',
-                  'users.simple_address',
-                  'organizations.name as organization',
-                  'roles.name as role'
+                    'users.id',
+                    'users.name',
+                    'users.email',
+                    'users.registration',
+                    'users.cpf',
+                    'users.landline',
+                    'users.cellphone',
+                    'users.whatsapp',
+                    'users.simple_address',
+                    'organizations.name as organization',
+                    'roles.name as role'
                 )
                 .order(id: :asc)
-                .limit(100)
-    render json: users, status: 200
+                .page(page_number)
+                .per(per_page)
+
+    response_data = {
+      data: users,
+      total_count: User.count
+    }
+    render json: response_data, status: 200
   end
 
   def show

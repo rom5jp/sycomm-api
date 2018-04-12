@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       resources :employees
       resources :customers
       resources :sessions, only: [:create, :destroy]
+      resources :roles, only: [:index]
+      resources :organizations, only: [:index]
     end
   end
 end

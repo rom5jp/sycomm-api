@@ -9,23 +9,20 @@ class Api::V1::UsersController < ApplicationController
     page_number = params[:page_number]
     per_page = params[:per_page]
 
-    puts ">>> page_number: #{page_number}"
-    puts ">>> per_page: #{per_page}"
-
     users = User.joins('INNER JOIN roles ON roles.id = users.role_id')
                 .joins('INNER JOIN organizations ON organizations.id = users.organization_id')
                 .select(
-                    'users.id',
-                    'users.name',
-                    'users.email',
-                    'users.registration',
-                    'users.cpf',
-                    'users.landline',
-                    'users.cellphone',
-                    'users.whatsapp',
-                    'users.simple_address',
-                    'organizations.name as organization',
-                    'roles.name as role'
+                  'users.id',
+                  'users.name',
+                  'users.email',
+                  'users.registration',
+                  'users.cpf',
+                  'users.landline',
+                  'users.cellphone',
+                  'users.whatsapp',
+                  'users.simple_address',
+                  'organizations.name as organization',
+                  'roles.name as role'
                 )
                 .order(id: :asc)
                 .page(page_number)
@@ -53,8 +50,8 @@ class Api::V1::UsersController < ApplicationController
                 'users.cellphone',
                 'users.whatsapp',
                 'users.simple_address',
-                'organizations.name as organization',
-                'roles.name as role'
+                'organizations.id as organization_id',
+                'roles.id as role_id'
               ).first
       render json: user, status: 200
     rescue
@@ -64,6 +61,10 @@ class Api::V1::UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
+    user.skip_password_validation = true
+
+    puts user.role
+    puts user.organization
 
     if user.save
       render json: user, status: 201
@@ -98,8 +99,9 @@ class Api::V1::UsersController < ApplicationController
       :cpf,
       :landline, :cellphone, :whatsapp,
       :simple_address,
-      :password,
-      :password_confirmation
+      :organization_id,
+      :role_id,
+      :type
     )
   end
 end

@@ -4,6 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   # belongs_to :address
+  attr_accessor :skip_password_validation
 
   validates :name, presence: true
   validates :cpf, presence: true, length: { is: 11 }
@@ -18,5 +19,12 @@ class User < ApplicationRecord
 
   def self.types
     %w(Master Employee Customer)
+  end
+  
+  protected
+
+  def password_required?
+    return false if skip_password_validation
+    super
   end
 end

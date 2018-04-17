@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :cpf, presence: true, length: { is: 11 }
-  validates :cellphone, presence: true
+  validates :cellphone, presence: true, length: { is: 11 }
   validates :type, presence: true
 
   self.inheritance_column = :type

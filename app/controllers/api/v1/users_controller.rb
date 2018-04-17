@@ -5,7 +5,7 @@ class Api::V1::UsersController < ApplicationController
   def index
   end
 
-  def get_all_paginated
+  def list_paginated
     page_number = params[:page_number]
     per_page = params[:per_page]
 
@@ -14,6 +14,7 @@ class Api::V1::UsersController < ApplicationController
                 .select(
                   'users.id',
                   'users.name',
+                  'users.type as user_type',
                   'users.email',
                   'users.registration',
                   'users.cpf',
@@ -21,8 +22,8 @@ class Api::V1::UsersController < ApplicationController
                   'users.cellphone',
                   'users.whatsapp',
                   'users.simple_address',
-                  'organizations.name as organization',
-                  'roles.name as role'
+                  'roles.name as role',
+                  'organizations.name as organization'
                 )
                 .order(id: :asc)
                 .page(page_number)

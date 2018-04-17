@@ -6,11 +6,17 @@ Rails.application.routes.draw do
   namespace :api, path: '/', defaults: { format: :json }, constraints: { subdomain: 'api' } do
     namespace :v1, path: '/', constraints: ApiVersionConstraint.new(version: 1, default: true) do
       resources :users do
-        get :get_all_paginated, to: 'users#get_all_paginated', on: :collection
+        get :list_paginated, to: 'users#list_paginated', on: :collection
       end
-      resources :masters
-      resources :employees
-      resources :customers
+      resources :masters do
+        get :list_paginated, to: 'masters#list_paginated', on: :collection
+      end
+      resources :employees do
+        get :list_paginated, to: 'employees#list_paginated', on: :collection
+      end
+      resources :customers do
+        get :list_paginated, to: 'customers#list_paginated', on: :collection
+      end
       resources :sessions, only: [:create, :destroy]
       resources :roles, only: [:index]
       resources :organizations, only: [:index]

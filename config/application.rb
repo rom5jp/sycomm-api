@@ -37,5 +37,7 @@ module SycommApi
         resource '*', :headers => :any, :methods => [:get, :post, :options, :put, :patch, :delete]
       end
     end
+
+    config.i18n.default_locale = :'pt-BR'
   end
 end

@@ -7,7 +7,6 @@ class User < ApplicationRecord
   attr_accessor :skip_password_validation
 
   validates :name, presence: true
-  validates :cellphone, uniqueness: true, length: { is: 11 }
   validates :type, presence: true
 
   self.inheritance_column = :type

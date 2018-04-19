@@ -8,15 +8,19 @@ Rails.application.routes.draw do
       resources :users do
         get :list_paginated, to: 'users#list_paginated', on: :collection
       end
-      resources :masters do
-        get :list_paginated, to: 'masters#list_paginated', on: :collection
+
+      resources :admins do
+        get :list_paginated, to: 'admins#list_paginated', on: :collection
       end
+
       resources :employees do
         get :list_paginated, to: 'employees#list_paginated', on: :collection
       end
+
       resources :customers do
         get :list_paginated, to: 'customers#list_paginated', on: :collection
       end
+
       resources :sessions, only: [:create, :destroy]
       resources :roles, only: [:index]
       resources :organizations, only: [:index]

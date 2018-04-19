@@ -7,18 +7,17 @@ class User < ApplicationRecord
   attr_accessor :skip_password_validation
 
   validates :name, presence: true
-  validates :cpf, presence: true, length: { is: 11 }
-  validates :cellphone, presence: true, length: { is: 11 }
+  validates :cellphone, uniqueness: true, length: { is: 11 }
   validates :type, presence: true
 
   self.inheritance_column = :type
 
-  scope :masters, -> { where(type: 'Master') }
+  scope :admins, -> { where(type: 'Admin') }
   scope :employees, -> { where(type: 'Employee') }
   scope :customers, -> { where(type: 'Customer') }
 
   def self.types
-    %w(Master Employee Customer)
+    %w(Admin Employee Customer)
   end
   
   protected

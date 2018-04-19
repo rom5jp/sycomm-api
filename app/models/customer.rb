@@ -1,4 +1,4 @@
-class Customer < User
+class Customer < Employee
   belongs_to :organization
   belongs_to :role
 

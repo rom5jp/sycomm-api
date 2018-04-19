@@ -1,14 +1,60 @@
 class Api::V1::CustomersController < ApplicationController
-  before_action :set_customer, only: [:show, :update, :destroy]
+A  # before_action :set_customer, only: [:show, :update, :destroy]
+  # before_action :authenticate_with_token!, only: [:update, :destroy]
 
   def index
-    customers = Customer.all.limit(10)
-    render json: customers, status: 200
+  end
+
+  def list_paginated
+    page_number = params[:page_number]
+    per_page = params[:per_page]
+
+    customers = User.customers
+                .joins('INNER JOIN roles ON roles.id = users.role_id')
+                .joins('INNER JOIN organizations ON organizations.id = users.organization_id')
+                .select(
+                    'users.id',
+                    'users.name',
+                    'users.email',
+                    'users.registration',
+                    'users.cpf',
+                    'users.landline',
+                    'users.cellphone',
+                    'users.whatsapp',
+                    'users.simple_address',
+                    'roles.name as role',
+                    'organizations.name as organization'
+                )
+                .order(id: :asc)
+                .page(page_number)
+                .per(per_page)
+
+    response_data = {
+        data: customers,
+        total_count: User.count
+    }
+    render json: response_data, status: 200
   end
 
   def show
     begin
-      customer = Customer.find(params[:id])
+      customer = User.customers
+                 .where(id: params[:id])
+                 .joins('INNER JOIN roles ON roles.id = users.role_id')
+                 .joins('INNER JOIN organizations ON organizations.id = users.organization_id')
+                 .select(
+                     'users.id',
+                     'users.name',
+                     'users.email',
+                     'users.registration',
+                     'users.cpf',
+                     'users.landline',
+                     'users.cellphone',
+                     'users.whatsapp',
+                     'users.simple_address',
+                     'organizations.id as organization_id',
+                     'roles.id as role_id'
+                 ).first
       render json: customer, status: 200
     rescue
       head 404
@@ -17,6 +63,10 @@ class Api::V1::CustomersController < ApplicationController
 
   def create
     customer = Customer.new(customer_params)
+    customer.skip_password_validation = true
+
+    puts customer.role
+    puts customer.organization
 
     if customer.save
       render json: customer, status: 201
@@ -26,28 +76,33 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def update
-    if @customer
-      if @customer.update_attributes(customer_params)
-        render json: @customer, status: 200
-      else
-        render json: { errors: @customer.errors }, status: 422
-      end
+    customer = Customer.find(customer_params[:id])
+
+    if customer.update_attributes(customer_params)
+      render json: customer, status: 200
     else
-      render json: { errors: customer_params.errors }, status: 404
+      render json: { errors: customer.errors }, status: 422
     end
   end
 
   def destroy
-    render(nothing: true, status: 204) if @customer.destroy
+    Customer.find(params[:id]).destroy
+    head 204
   end
 
   private
 
-  def set_customer
-    begin
-      @customer = Customer.find(params[:id])
-    rescue
-      head 404
-    end
+  def customer_params
+    params.require(:customer).permit(
+      :id,
+      :name,
+      :email,
+      :registration,
+      :cpf,
+      :landline, :cellphone, :whatsapp,
+      :simple_address,
+      :organization_id,
+      :role_id
+    )
   end
 end

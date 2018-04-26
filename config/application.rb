@@ -30,14 +30,6 @@ module SycommApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    # CORS config
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :options, :put, :patch, :delete]
-      end
-    end
-
     config.i18n.default_locale = :'pt-BR'
   end
 end

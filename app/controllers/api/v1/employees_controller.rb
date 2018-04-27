@@ -1,4 +1,4 @@
-class Api::V1::EmployeesController < ApplicationController
+class Api::V1::EmployeesController < Api::V1::BaseController
   # before_action :set_employee, only: [:show, :update, :destroy]
   # before_action :authenticate_with_token!, only: [:update, :destroy]
 

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180419002238) do
+ActiveRecord::Schema.define(version: 20180424020652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "addresses", force: :cascade do |t|
     t.string "street", null: false
@@ -77,13 +78,13 @@ ActiveRecord::Schema.define(version: 20180419002238) do
 
   create_table "users", force: :cascade do |t|
     t.string "registration"
-    t.string "email", default: "", null: false
-    t.string "name", null: false
+    t.string "email"
+    t.string "name"
     t.string "surname"
     t.string "nickname"
     t.string "cpf"
     t.string "landline"
-    t.string "cellphone", default: "", null: false
+    t.string "cellphone"
     t.string "whatsapp"
     t.string "simple_address"
     t.string "type", null: false
@@ -102,6 +103,13 @@ ActiveRecord::Schema.define(version: 20180419002238) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.string "auth_token"
+    t.string "provider", default: "email", null: false
+    t.uuid "uid", default: -> { "uuid_generate_v4()" }, null: false
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.json "tokens"
     t.index ["address_id"], name: "index_users_on_address_id"
     t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["cpf"], name: "index_users_on_cpf"
@@ -110,6 +118,7 @@ ActiveRecord::Schema.define(version: 20180419002238) do
     t.index ["registration"], name: "index_users_on_registration"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
   add_foreign_key "addresses", "cities"

@@ -25,7 +25,6 @@ namespace :populate_db do
               SELECT name, cpf, registration, 'Customer', simple_address, NOW(), NOW()
               FROM user_seeds;"
 
-    # ActiveRecord::Base.connection.execute("INSERT INTO ")
     ActiveRecord::Base.connection.execute(query)
 
     puts ">> END\n"

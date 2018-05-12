@@ -34,11 +34,11 @@ class User < ApplicationRecord
   private
 
   def generate_uuid!
-    self.uid = SecureRandom.uuid if self.uid.nil?
+    self.uid = SecureRandom.uuid if self.uid.blank?
   end
 
   def generate_auth_token!
-    self.auth_token = Devise.friendly_token if self.auth_token.nil?
+    self.auth_token = Devise.friendly_token if self.auth_token.blank?
   end
 
   def downcase_email

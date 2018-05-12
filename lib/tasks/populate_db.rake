@@ -2,10 +2,10 @@
 namespace :populate_db do
   desc 'All'
   task all: [
-    :import_from_csv, 
-    :insert_into_users_from_select_userseeds, 
-    :populate_roles, :populate_organizations, 
-    :update_users_roles_from_csv, :update_users_organizations_from_csv
+    :import_from_csv,
+    :insert_into_users_from_select_userseeds,
+    :populate_roles, :populate_organizations
+    # :update_users_roles_from_csv, :update_users_organizations_from_csv
   ]
   
   desc "It populates database from a .csv file"
@@ -21,8 +21,8 @@ namespace :populate_db do
   desc "Insert into 'users' from select from 'user_seeds'"
   task insert_into_users_from_select_userseeds: :environment do
     puts "> Inserting into 'users' from select from 'user_seeds'..."
-    query = "INSERT INTO users (name, cpf, registration, type, simple_address, created_at, updated_at)
-              SELECT name, cpf, registration, 'Customer', simple_address, NOW(), NOW()
+    query = " INSERT INTO users(name, cpf, registration, type, simple_address, created_at, updated_at, uid, provider)
+              SELECT name, cpf, registration, 'Customer', simple_address, NOW(), NOW(), uuid_generate_v4(), 'email'
               FROM user_seeds;"
 
     ActiveRecord::Base.connection.execute(query)

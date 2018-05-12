@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20180424020652) do
   create_table "users", force: :cascade do |t|
     t.string "registration"
     t.string "email"
-    t.string "name"
+    t.string "name", null: false
     t.string "surname"
     t.string "nickname"
     t.string "cpf"
@@ -105,11 +105,7 @@ ActiveRecord::Schema.define(version: 20180424020652) do
     t.string "auth_token"
     t.string "provider", default: "email", null: false
     t.uuid "uid", default: -> { "uuid_generate_v4()" }, null: false
-    t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
-    t.json "tokens"
+    t.text "tokens"
     t.index ["address_id"], name: "index_users_on_address_id"
     t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["cpf"], name: "index_users_on_cpf"

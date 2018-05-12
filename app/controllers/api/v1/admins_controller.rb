@@ -1,6 +1,5 @@
-class Api::V1::AdminsController < Api::V1::BaseController
+class Api::V1::AdminsController < Api::V1::BaseApiController
   # before_action :set_admin, only: [:show, :update, :destroy]
-  # before_action :authenticate_with_token!, only: [:update, :destroy]
 
   def index
   end

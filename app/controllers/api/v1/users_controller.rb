@@ -1,19 +1,26 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < Api::V1::BaseApiController
   # before_action :set_user, only: [:show, :update, :destroy]
-  # before_action :authenticate_with_token!, only: [:update, :destroy]
+  before_action :authenticate_user!
+
+  respond_to :json
 
   def index
+    cu = current_user
+    puts " >>>>>>>>>>>>>>> current_user: #{current_user.name}"
+    puts " >>>>>>>>>>>>>>> user_logged_in? #{user_logged_in?}"
+    render json: cu, status: 200
   end
 
   def list_paginated
-    page_number = params[:page_number]
-    per_page = params[:per_page]
+    page_number = params[:page_number] || 1
+    per_page = params[:per_page] || 10
 
     users = User.joins('INNER JOIN roles ON roles.id = users.role_id')
                 .joins('INNER JOIN organizations ON organizations.id = users.organization_id')
                 .select(
                   'users.id',
                   'users.name',
+                  
                   'users.type as user_type',
                   'users.email',
                   'users.registration',
@@ -96,6 +103,8 @@ class Api::V1::UsersController < ApplicationController
       :id,
       :name,
       :email,
+      :password,
+      :password_confirmation,
       :registration,
       :cpf,
       :landline, :cellphone, :whatsapp,

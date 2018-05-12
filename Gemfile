@@ -44,6 +44,8 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+gem 'rails_12factor', group: :production
+
 gem 'rack-cors'
 gem 'rack-attack'
 

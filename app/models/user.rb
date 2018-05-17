@@ -19,7 +19,8 @@ class User < ApplicationRecord
   scope :customers, -> { where(type: 'Customer') }
 
   # CALLBACKS
-  before_save :generate_uuid!, :downcase_email
+  # before_save :generate_uuid!
+  before_save :downcase_email
   before_validation :generate_auth_token!
 
   def self.types

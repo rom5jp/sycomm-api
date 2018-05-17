@@ -1,5 +1,5 @@
 class Api::V1::AdminsController < Api::V1::BaseApiController
-  # before_action :set_admin, only: [:show, :update, :destroy]
+  respond_to :json
 
   def index
   end

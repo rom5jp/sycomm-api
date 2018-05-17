@@ -1,5 +1,5 @@
 class Api::V1::EmployeesController < Api::V1::BaseApiController
-  # before_action :set_employee, only: [:show, :update, :destroy]
+  respond_to :json
 
   def index
   end

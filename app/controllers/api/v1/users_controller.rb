@@ -1,7 +1,4 @@
 class Api::V1::UsersController < Api::V1::BaseApiController
-  # before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authenticate_user!
-
   respond_to :json
 
   def index
@@ -20,7 +17,6 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                 .select(
                   'users.id',
                   'users.name',
-                  
                   'users.type as user_type',
                   'users.email',
                   'users.registration',
@@ -59,7 +55,10 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                 'users.whatsapp',
                 'users.simple_address',
                 'organizations.id as organization_id',
-                'roles.id as role_id'
+                'organizations.name as organization',
+                'roles.id as role_id',
+                'roles.name as role',
+                'users.type as user_type'
               ).first
       render json: user, status: 200
     rescue

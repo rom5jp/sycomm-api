@@ -21,9 +21,13 @@ namespace :populate_db do
   desc "Insert into 'users' from select from 'user_seeds'"
   task insert_into_users_from_select_userseeds: :environment do
     puts "> Inserting into 'users' from select from 'user_seeds'..."
-    query = " INSERT INTO users(name, cpf, registration, type, simple_address, created_at, updated_at, uid, provider)
+    query = " CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";
+              INSERT INTO users(name, cpf, registration, type, simple_address, created_at, updated_at, uid, provider)
               SELECT name, cpf, registration, 'Customer', simple_address, NOW(), NOW(), uuid_generate_v4(), 'email'
               FROM user_seeds;"
+    # query = " INSERT INTO users(name, email, cpf, registration, type, simple_address, created_at, updated_at, uid, provider)
+    #           SELECT name, LOWER(CONCAT(TRIM(SUBSTR(name, 1, (POSITION(' ' IN name)))), registration || '@mail.com')), cpf, registration, 'Customer', simple_address, NOW(), NOW(), LOWER(CONCAT(TRIM(SUBSTR(name, 1, (POSITION(' ' IN name)))), registration || '@mail.com')), 'email'
+    #           FROM user_seeds;"
 
     ActiveRecord::Base.connection.execute(query)
 

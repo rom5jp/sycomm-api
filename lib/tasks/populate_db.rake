@@ -4,8 +4,8 @@ namespace :populate_db do
   task all: [
     :import_from_csv,
     :insert_into_users_from_select_userseeds,
-    :populate_roles, :populate_organizations
-    # :update_users_roles_from_csv, :update_users_organizations_from_csv
+    :populate_roles, :populate_organizations,
+    :update_users_roles_from_csv, :update_users_organizations_from_csv
   ]
   
   desc "It populates database from a .csv file"
@@ -108,7 +108,40 @@ namespace :populate_db do
     
     csv_filename = 'update_customers_roles_from_csv.sql'
 
-    ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
+    # ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
+
+    ActiveRecord::Base.connection.execute("
+      DO $$
+      DECLARE
+        v_registration VARCHAR(255);
+        v_role_id INTEGER;
+        c_roles CURSOR FOR 
+          SELECT us.registration, r.id as role_id
+          FROM user_seeds us 
+          INNER JOIN users u
+            ON us.registration = u.registration
+          INNER JOIN roles r
+            ON us.role = r.name
+          WHERE u.type = 'Customer';
+      BEGIN
+        OPEN c_roles;
+      
+        LOOP
+          FETCH c_roles INTO v_registration, v_role_id;
+          EXIT WHEN NOT FOUND;
+      
+          -- raise notice 'v_reg: %', v_registratoin;
+          -- raise notice 'v_role_id: %', v_role_id;
+          -- raise notice '---';
+          
+          UPDATE users
+          SET role_id = v_role_id
+          WHERE registration LIKE v_registration;
+        END LOOP;
+      
+        CLOSE c_roles;
+      END$$;
+    ")
 
     puts ">> END\n"
   end
@@ -119,7 +152,40 @@ namespace :populate_db do
     
     csv_filename = 'update_customers_organizations_from_csv.sql'
 
-    ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
+    # ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
+
+    ActiveRecord::Base.connection.execute("
+      DO $$
+      DECLARE
+        v_registration VARCHAR(255);
+        v_organization_id INTEGER;
+        c_organizations CURSOR FOR 
+          SELECT us.registration, r.id as organization_id
+          FROM user_seeds us 
+          INNER JOIN users u
+            ON us.registration = u.registration
+          INNER JOIN organizations r
+            ON us.organization = r.name
+          WHERE u.type = 'Customer';
+      BEGIN
+        OPEN c_organizations;
+      
+        LOOP
+          FETCH c_organizations INTO v_registration, v_organization_id;
+          EXIT WHEN NOT FOUND;
+      
+          -- raise notice 'v_reg: %', v_registratoin;
+          -- raise notice 'v_organization_id: %', v_organization_id;
+          -- raise notice '---';
+          
+          UPDATE users
+          SET organization_id = v_organization_id
+          WHERE registration LIKE v_registration;
+        END LOOP;
+      
+        CLOSE c_organizations;
+      END$$;
+    ")
 
     puts ">> END\n"
   end

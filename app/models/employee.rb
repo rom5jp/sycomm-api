@@ -1,4 +1,5 @@
 class Employee < User
-  validates :cpf, presence: true, length: { is: 11 }
-  validates :cellphone, presence: true
+  validates :landline, length: { is: 11 }, allow_blank: true
+  validates :cellphone, presence: true, length: { is: 11 }
+  validates :whatsapp, length: { is: 11 }, allow_blank: true
 end

@@ -58,5 +58,8 @@ gem 'devise'
 gem 'devise_token_auth'
 # Pagination
 gem 'kaminari'
-
-gem 'active_model_serializers', '~> 0.10.0'
+# Serialization
+gem 'active_model_serializers'
+# Role and authorization
+gem 'cancancan', '~> 2.0'
+gem 'rolify'

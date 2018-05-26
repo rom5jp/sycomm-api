@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20180424020652) do
     t.string "cellphone"
     t.string "whatsapp"
     t.string "simple_address"
-    t.string "type", null: false
+    t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "organization_id"

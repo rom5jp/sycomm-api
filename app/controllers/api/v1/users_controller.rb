@@ -99,7 +99,6 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     user = User.find(user_params[:id])
 
     begin
-      puts " >>>>> #{user.type}"
       user.update!(user_params)
       render json: user, status: 200
     rescue Exception => msg
@@ -127,7 +126,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
       :simple_address,
       :organization_id,
       :role_id,
-      :user_type
+      :type
     )
   end
 end

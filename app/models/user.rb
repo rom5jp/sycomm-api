@@ -26,7 +26,19 @@ class User < ApplicationRecord
 
   # sobrescrita do metodo do devise para poder retornar os valores que quero apos fazer login
   def token_validation_response
-    { id: id, name: name, email: email, cpf: cpf, auth_token: auth_token, created_at: created_at, updated_at: updated_at, type: type }
+    { 
+      id: id,
+      name: name,
+      email: email,
+      landline: landline,
+      cellphone: cellphone,
+      whatsapp: whatsapp,
+      simple_address: simple_address,
+      auth_token: auth_token,
+      created_at: created_at,
+      updated_at: updated_at,
+      type: type 
+  }
   end
 
   private

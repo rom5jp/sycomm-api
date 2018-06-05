@@ -3,7 +3,7 @@ class Customer < Employee
   belongs_to :role
 
   validates :cpf, presence: true, length: { is: 11 }
-  validates :registration, numericality: true
+  validates :registration, presence: true, numericality: true
 
   def token_validation_response
     { 

@@ -26,6 +26,11 @@ Rails.application.routes.draw do
 
       resources :roles, only: [:index]
       resources :organizations, only: [:index]
+
+      scope '/activities' do
+        get 'list_user_activities', controller: :activities, action: :list_user_activities
+      end
+
     end
   end
 end

@@ -10,11 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424020652) do
+ActiveRecord::Schema.define(version: 20180606213203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "activities", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "status", default: 0, null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_activities_on_user_id"
+  end
 
   create_table "addresses", force: :cascade do |t|
     t.string "street", null: false

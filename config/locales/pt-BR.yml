@@ -25,8 +25,8 @@ pt-BR:
         email: E-mail
         cellphone: Celular
         landline: Telefone fixo
-        role: Cargo
-        organization: Órgão
+        public_office: Cargo
+        public_agency: Órgão
       admin:
         cpf: CPF
         email: E-mail
@@ -42,8 +42,8 @@ pt-BR:
         email: E-mail
         cellphone: Celular
         landline: Telefone fixo
-        role: Cargo
-        organization: Órgão
+        public_office: Cargo
+        public_agency: Órgão
   date:
     abbr_day_names:
     - Dom

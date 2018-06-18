@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::RolesController, type: :controller do
+RSpec.describe Api::V1::PublicOfficesController, type: :controller do
 
 end

@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 20180606213203) do
     t.string "name"
     t.string "description"
     t.integer "status", default: 0, null: false
+    t.integer "type"
+    t.integer "client_id"
+    t.string "client_name"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -56,14 +59,14 @@ ActiveRecord::Schema.define(version: 20180606213203) do
     t.index ["city_id"], name: "index_neighborhoods_on_city_id"
   end
 
-  create_table "organizations", force: :cascade do |t|
+  create_table "public_agencies", force: :cascade do |t|
     t.string "name", null: false
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "roles", force: :cascade do |t|
+  create_table "public_offices", force: :cascade do |t|
     t.string "name", null: false
     t.string "description"
     t.datetime "created_at", null: false
@@ -80,8 +83,8 @@ ActiveRecord::Schema.define(version: 20180606213203) do
   create_table "user_seeds", force: :cascade do |t|
     t.string "name"
     t.string "registration"
-    t.string "organization"
-    t.string "role"
+    t.string "public_agency"
+    t.string "public_office"
     t.string "cpf"
     t.string "simple_address"
   end
@@ -97,11 +100,11 @@ ActiveRecord::Schema.define(version: 20180606213203) do
     t.string "cellphone"
     t.string "whatsapp"
     t.string "simple_address"
-    t.string "type"
+    t.string "type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "organization_id"
-    t.bigint "role_id"
+    t.bigint "public_agency_id"
+    t.bigint "public_office_id"
     t.bigint "address_id"
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -120,10 +123,10 @@ ActiveRecord::Schema.define(version: 20180606213203) do
     t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["cpf"], name: "index_users_on_cpf"
     t.index ["email"], name: "index_users_on_email"
-    t.index ["organization_id"], name: "index_users_on_organization_id"
+    t.index ["public_agency_id"], name: "index_users_on_public_agency_id"
+    t.index ["public_office_id"], name: "index_users_on_public_office_id"
     t.index ["registration"], name: "index_users_on_registration"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
@@ -133,6 +136,6 @@ ActiveRecord::Schema.define(version: 20180606213203) do
   add_foreign_key "cities", "states"
   add_foreign_key "neighborhoods", "cities"
   add_foreign_key "users", "addresses"
-  add_foreign_key "users", "organizations"
-  add_foreign_key "users", "roles"
+  add_foreign_key "users", "public_agencies"
+  add_foreign_key "users", "public_offices"
 end

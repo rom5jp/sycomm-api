@@ -4,8 +4,8 @@ namespace :populate_db do
   task all: [
     :import_from_csv,
     :insert_into_users_from_select_userseeds,
-    :populate_roles, :populate_organizations,
-    :update_users_roles_from_csv, :update_users_organizations_from_csv
+    :populate_public_offices, :populate_public_agencies,
+    :update_users_public_offices_from_csv, :update_users_public_agencies_from_csv
   ]
   
   desc "It populates database from a .csv file"
@@ -34,10 +34,10 @@ namespace :populate_db do
     puts ">> END\n"
   end
 
-  desc "Populate 'roles' table"
-  task populate_roles: :environment do
-    puts "> Populating 'roles' table..."
-    roles = [
+  desc "Populate 'public_offices' table"
+  task populate_public_offices: :environment do
+    puts "> Populating 'public_offices' table..."
+    public_offices = [
       'Aposentado',
       'Aposentado/Pensionista',
       'Efetivo',
@@ -51,16 +51,16 @@ namespace :populate_db do
       'Estagiario'
     ]
 
-    roles.each do |r|
-      Role.create(name: r)
+    public_offices.each do |po|
+      PublicOffice.create(name: po)
     end
 
     puts ">> END\n"
   end
   
-  desc "Populates 'organizations' table"
-  task populate_organizations: :environment do
-    puts "> Populating 'organizations' table"
+  desc "Populates 'public_agencies' table"
+  task populate_public_agencies: :environment do
+    puts "> Populating 'public_agencies' table"
 
     orgs = [
       'PBPREV - INATIVOS',
@@ -96,17 +96,17 @@ namespace :populate_db do
     ]
 
     orgs.each do |o|
-      Organization.create(name: o)
+      PublicAgency.create(name: o)
     end
 
     puts ">> END\n"
   end
 
-  desc "Updates all customers role reference with synced value from csv file"
-  task update_users_roles_from_csv: :environment do
-    puts "> Updating customers role reference with synced value from csv file..."
+  desc "Updates all customers public_office reference with synced value from csv file"
+  task update_users_public_offices_from_csv: :environment do
+    puts "> Updating customers public_office reference with synced value from csv file..."
     
-    csv_filename = 'update_customers_roles_from_csv.sql'
+    csv_filename = 'update_customers_public_offices_from_csv.sql'
 
     # ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
 
@@ -114,43 +114,43 @@ namespace :populate_db do
       DO $$
       DECLARE
         v_registration VARCHAR(255);
-        v_role_id INTEGER;
-        c_roles CURSOR FOR 
-          SELECT us.registration, r.id as role_id
+        v_public_office_id INTEGER;
+        c_public_offices CURSOR FOR
+          SELECT us.registration, r.id as public_office_id
           FROM user_seeds us 
           INNER JOIN users u
             ON us.registration = u.registration
-          INNER JOIN roles r
-            ON us.role = r.name
+          INNER JOIN public_offices r
+            ON us.public_office = r.name
           WHERE u.type = 'Customer';
       BEGIN
-        OPEN c_roles;
+        OPEN c_public_offices;
       
         LOOP
-          FETCH c_roles INTO v_registration, v_role_id;
+          FETCH c_public_offices INTO v_registration, v_public_office_id;
           EXIT WHEN NOT FOUND;
       
           -- raise notice 'v_reg: %', v_registratoin;
-          -- raise notice 'v_role_id: %', v_role_id;
+          -- raise notice 'v_public_office_id: %', v_public_office_id;
           -- raise notice '---';
           
           UPDATE users
-          SET role_id = v_role_id
+          SET public_office_id = v_public_office_id
           WHERE registration LIKE v_registration;
         END LOOP;
       
-        CLOSE c_roles;
+        CLOSE c_public_offices;
       END$$;
     ")
 
     puts ">> END\n"
   end
 
-  desc "Updates all customers organization reference with synced value from csv file"
-  task update_users_organizations_from_csv: :environment do
-    puts "> Updating customers organization reference with synced value from csv file..."
+  desc "Updates all customers public_agency reference with synced value from csv file"
+  task update_users_public_agencies_from_csv: :environment do
+    puts "> Updating customers public_agency reference with synced value from csv file..."
     
-    csv_filename = 'update_customers_organizations_from_csv.sql'
+    csv_filename = 'update_customers_public_agencies_from_csv.sql'
 
     # ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
 
@@ -158,32 +158,32 @@ namespace :populate_db do
       DO $$
       DECLARE
         v_registration VARCHAR(255);
-        v_organization_id INTEGER;
-        c_organizations CURSOR FOR 
-          SELECT us.registration, r.id as organization_id
+        v_public_agency_id INTEGER;
+        c_public_agencies CURSOR FOR
+          SELECT us.registration, r.id as public_agency_id
           FROM user_seeds us 
           INNER JOIN users u
             ON us.registration = u.registration
-          INNER JOIN organizations r
-            ON us.organization = r.name
+          INNER JOIN public_agencies r
+            ON us.public_agency = r.name
           WHERE u.type = 'Customer';
       BEGIN
-        OPEN c_organizations;
+        OPEN c_public_agencies;
       
         LOOP
-          FETCH c_organizations INTO v_registration, v_organization_id;
+          FETCH c_public_agencies INTO v_registration, v_public_agency_id;
           EXIT WHEN NOT FOUND;
       
           -- raise notice 'v_reg: %', v_registratoin;
-          -- raise notice 'v_organization_id: %', v_organization_id;
+          -- raise notice 'v_public_agency_id: %', v_public_agency_id;
           -- raise notice '---';
           
           UPDATE users
-          SET organization_id = v_organization_id
+          SET public_agency_id = v_public_agency_id
           WHERE registration LIKE v_registration;
         END LOOP;
       
-        CLOSE c_organizations;
+        CLOSE c_public_agencies;
       END$$;
     ")
 

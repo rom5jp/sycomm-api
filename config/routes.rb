@@ -24,8 +24,8 @@ Rails.application.routes.draw do
         get :list_paginated, to: 'customers#list_paginated', on: :collection
       end
 
-      resources :roles, only: [:index]
-      resources :organizations, only: [:index]
+      resources :public_offices, only: [:index]
+      resources :public_agencies, only: [:index]
 
       scope '/activities' do
         get 'list_user_activities', controller: :activities, action: :list_user_activities

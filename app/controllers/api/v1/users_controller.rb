@@ -44,8 +44,8 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                   .per(per_page)
     when 'Customer'
       users = User.customers
-                  .joins('INNER JOIN roles ON roles.id = users.role_id')
-                  .joins('INNER JOIN organizations ON organizations.id = users.organization_id')
+                  .joins('INNER JOIN public_offices ON public_offices.id = users.public_office_id')
+                  .joins('INNER JOIN public_agencies ON public_agencies.id = users.public_agency_id')
                   .select(
                     'users.id',
                     'users.name',
@@ -56,8 +56,8 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                     'users.cellphone',
                     'users.whatsapp',
                     'users.simple_address',
-                    'roles.name as role',
-                    'organizations.name as organization'
+                    'public_offices.name as public_office',
+                    'public_agencies.name as public_agency'
                   )
                   .order(id: :asc)
                   .page(page_number)
@@ -85,8 +85,8 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     user = User.new(user_params)
     user.skip_password_validation = true
 
-    puts user.role
-    puts user.organization
+    puts user.public_office
+    puts user.public_agency
 
     if user.save
       render json: user, status: 201
@@ -123,8 +123,8 @@ class Api::V1::UsersController < Api::V1::BaseApiController
       :cpf,
       :landline, :cellphone, :whatsapp,
       :simple_address,
-      :organization_id,
-      :role_id,
+      :public_agency_id,
+      :public_office_id,
       :type
     )
   end

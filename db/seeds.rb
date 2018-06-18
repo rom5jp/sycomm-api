@@ -7,8 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 User.create(name: 'admin', email: 'admin@gmail.com', cpf: '07644271481', password: '123123', password_confirmation: '123123', type: 'Admin')
 User.create(name: 'Funcionario1', email: 'func1@gmail.com', cpf: '07644271481', cellphone: '83888888888', password: '123123', password_confirmation: '123123', type: 'Employee')
+func1 = User.last
 User.first.update!(email: 'a@mail.com', password: '123123', password_confirmation: '123123', type: 'Customer', cellphone: '83996447337')
 
 1.upto 10 do |n|
-  Activity.create(name: "Atividade #{n}", description: "Descrição da atividade #{n}", user_id: 224790)
+  Activity.create(name: "Atividade #{n}", description: "Descrição da atividade #{n}", user_id: func1, client_name: "Cliente #{n}")
 end

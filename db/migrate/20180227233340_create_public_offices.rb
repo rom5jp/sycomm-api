@@ -1,6 +1,6 @@
-class CreateOrganizations < ActiveRecord::Migration[5.1]
+class CreatePublicOffices < ActiveRecord::Migration[5.1]
   def change
-    create_table :organizations do |t|
+    create_table :public_offices do |t|
       t.string :name, null: false
       t.string :description
 

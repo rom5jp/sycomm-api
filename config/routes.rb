@@ -12,23 +12,12 @@ Rails.application.routes.draw do
         get :list_paginated, to: 'users#list_paginated', on: :collection
       end
 
-      resources :admins do
-        get :list_paginated, to: 'admins#list_paginated', on: :collection
-      end
-
-      resources :employees do
-        get :list_paginated, to: 'employees#list_paginated', on: :collection
-      end
-
-      resources :customers do
-        get :list_paginated, to: 'customers#list_paginated', on: :collection
-      end
-
       resources :public_offices, only: [:index]
       resources :public_agencies, only: [:index]
 
-      scope '/activities' do
-        get 'list_user_activities', controller: :activities, action: :list_user_activities
+      resources :activities, only: [:show] do
+        get 'list_user_activities', controller: :activities, action: :list_user_activities, on: :collection
+        get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
       end
 
     end

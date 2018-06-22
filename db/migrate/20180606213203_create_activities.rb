@@ -4,7 +4,7 @@ class CreateActivities < ActiveRecord::Migration[5.1]
       t.string      :name
       t.string      :description
       t.integer     :status, null: false, default: 0
-      t.integer     :type
+      t.integer     :activity_type
       t.integer     :client_id
       t.string      :client_name
       t.belongs_to  :user, index: true

@@ -4,17 +4,19 @@ namespace :populate_db do
   task all: [
     :import_from_csv,
     :insert_into_users_from_select_userseeds,
-    :populate_public_offices, :populate_public_agencies,
-    :update_users_public_offices_from_csv, :update_users_public_agencies_from_csv
+    :populate_public_offices,
+    :populate_public_agencies,
+    :update_users_public_offices_from_csv,
+    :update_users_public_agencies_from_csv
   ]
-  
+
   desc "It populates database from a .csv file"
   task import_from_csv: :environment do
     csv_filename = 'import_users_from_csv.sql'
-    
+
     puts "> Importing data from #{File.expand_path(csv_filename, '../sycomm-api/db/scripts')}..."
     ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
-    
+
     puts ">> END\n"
   end
 
@@ -25,9 +27,6 @@ namespace :populate_db do
               INSERT INTO users(name, cpf, registration, type, simple_address, created_at, updated_at, uid, provider)
               SELECT name, cpf, registration, 'Customer', simple_address, NOW(), NOW(), uuid_generate_v4(), 'email'
               FROM user_seeds;"
-    # query = " INSERT INTO users(name, email, cpf, registration, type, simple_address, created_at, updated_at, uid, provider)
-    #           SELECT name, LOWER(CONCAT(TRIM(SUBSTR(name, 1, (POSITION(' ' IN name)))), registration || '@mail.com')), cpf, registration, 'Customer', simple_address, NOW(), NOW(), LOWER(CONCAT(TRIM(SUBSTR(name, 1, (POSITION(' ' IN name)))), registration || '@mail.com')), 'email'
-    #           FROM user_seeds;"
 
     ActiveRecord::Base.connection.execute(query)
 

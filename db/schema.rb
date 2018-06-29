@@ -14,13 +14,12 @@ ActiveRecord::Schema.define(version: 20180606213203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
 
   create_table "activities", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.integer "status", default: 0, null: false
-    t.integer "type"
+    t.integer "activity_type"
     t.integer "client_id"
     t.string "client_name"
     t.bigint "user_id"
@@ -115,12 +114,10 @@ ActiveRecord::Schema.define(version: 20180606213203) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.string "auth_token"
     t.string "provider", default: "email", null: false
-    t.uuid "uid", default: -> { "uuid_generate_v4()" }, null: false
+    t.string "uid", default: "", null: false
     t.text "tokens"
     t.index ["address_id"], name: "index_users_on_address_id"
-    t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["cpf"], name: "index_users_on_cpf"
     t.index ["email"], name: "index_users_on_email"
     t.index ["public_agency_id"], name: "index_users_on_public_agency_id"

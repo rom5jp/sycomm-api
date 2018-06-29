@@ -1,11 +1,12 @@
 class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[5.1]
   def change
-    enable_extension 'uuid-ossp'
+    # enable_extension 'uuid-ossp'
 
     change_table(:users) do |t|
       ## Required
       t.string :provider, :null => false, :default => "email"
-      t.uuid :uid, :null => false, :default => 'uuid_generate_v4()'
+      t.string :uid, :null => false, :default => ""
+      # t.uuid :uid, :null => false, :default => 'uuid_generate_v4()'
 
       ## Database authenticatable
       # t.string :encrypted_password, :null => false, :default => ""

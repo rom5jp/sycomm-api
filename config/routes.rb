@@ -15,8 +15,8 @@ Rails.application.routes.draw do
       resources :public_offices, only: [:index]
       resources :public_agencies, only: [:index]
 
-      resources :activities, only: [:show] do
-        get 'list_user_activities', controller: :activities, action: :list_user_activities, on: :collection
+      resources :activities, only: [:show, :update] do
+        get 'list_last_user_activities', controller: :activities, action: :list_last_user_activities, on: :collection
         get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
       end
 

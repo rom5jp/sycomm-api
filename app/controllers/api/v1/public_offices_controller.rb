@@ -1,6 +1,8 @@
 class Api::V1::PublicOfficesController < Api::V1::BaseApiController
+  before_action :authenticate_user!
+
   def index
     public_offices = PublicOffice.all.select(:id, :name, :description)
-    render json: public_offices, status: 200
+    render json: { data: public_offices }, status: 200
   end
 end

@@ -8,16 +8,14 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :type, presence: true
-  validates :auth_token, uniqueness: true
 
   scope :admins, -> { where(type: 'Admin') }
   scope :employees, -> { where(type: 'Employee') }
   scope :customers, -> { where(type: 'Customer') }
 
   # CALLBACKS
-  before_save :generate_uuid!
-  before_save :downcase_email
-  before_validation :generate_auth_token!
+  before_validation :generate_uuid!
+  before_create :downcase_email
 
   def password_required?
     return false if skip_password_validation
@@ -26,19 +24,20 @@ class User < ApplicationRecord
 
   # sobrescrita do metodo do devise para poder retornar os valores que quero apos fazer login
   def token_validation_response
-    { 
+    {
       id: id,
-      name: name,
       email: email,
+      name: name,
+      surname: surname,
+      cpf: cpf,
       landline: landline,
       cellphone: cellphone,
       whatsapp: whatsapp,
       simple_address: simple_address,
-      auth_token: auth_token,
       created_at: created_at,
       updated_at: updated_at,
-      type: type 
-  }
+      type: type
+    }
   end
 
   private
@@ -47,13 +46,7 @@ class User < ApplicationRecord
     self.uid = SecureRandom.uuid if self.uid.blank?
   end
 
-  def generate_auth_token!
-    self.auth_token = Devise.friendly_token if self.auth_token.blank?
-  end
-
   def downcase_email
     self.email = self.email.delete(' ').downcase
   end
-
-  
 end

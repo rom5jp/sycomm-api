@@ -9,22 +9,24 @@ class Customer < User
   validates :whatsapp, allow_blank: true, length: { minimum: 8 }, numericality: true
 
   def token_validation_response
-    { 
+    {
       id: id,
-      name: name,
       email: email,
-      cpf: cpf,
+      provider: provider,
+      name: name,
+      surname: surname,
+      nickname: nickname,
       registration: registration,
+      cpf: cpf,
       landline: landline,
       cellphone: cellphone,
       whatsapp: whatsapp,
       simple_address: simple_address,
-      public_office: public_office,
       public_agency: public_agency,
-      auth_token: auth_token,
+      public_office: public_office,
+      type: type,
       created_at: created_at,
-      updated_at: updated_at,
-      type: type 
-  }
+      updated_at: updated_at
+    }
   end
 end

@@ -75,7 +75,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     user = User.find(params[:id])
 
     if user.present?
-      render json: { data: user }, status: 200
+      render json: user, status: 200
     else
       head 404
     end
@@ -89,7 +89,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     puts user.public_agency
 
     if user.save
-      render json: { data: user }, status: 201
+      render json: user, status: 201
     else
       render json: { errors: user.errors }, status: 422
     end
@@ -100,7 +100,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
 
     begin
       user.update!(user_params)
-      render json: { data: user }, status: 200
+      render json: user, status: 200
     rescue Exception => msg
       render json: { errors: user.errors }, status: 422
     end

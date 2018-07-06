@@ -1,6 +1,4 @@
 class Api::V1::ActivitiesController < Api::V1::BaseApiController
-  before_action :authenticate_user!
-
   def list_last_user_activities
     activities = Activity.where(user: params[:user_id]).limit(params[:quant])
 

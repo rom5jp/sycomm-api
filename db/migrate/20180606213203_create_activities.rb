@@ -3,6 +3,7 @@ class CreateActivities < ActiveRecord::Migration[5.1]
     create_table :activities do |t|
       t.string      :name
       t.string      :description
+      t.string      :annotations
       t.integer     :status, null: false, default: 0
       t.integer     :activity_type
       t.integer     :client_id

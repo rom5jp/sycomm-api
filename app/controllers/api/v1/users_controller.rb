@@ -69,6 +69,21 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     render json: response_data, status: 200
   end
 
+  def list_by_type
+    user_type = params['user_type']
+
+    case user_type
+      when 'Admin'
+        users = User.admins
+      when 'Employee'
+        users = User.employees
+      when 'Customer'
+        users = User.customers
+    end
+
+    render json: users, status: 200
+  end
+
   def show
     user = User.find(params[:id])
 
@@ -82,9 +97,6 @@ class Api::V1::UsersController < Api::V1::BaseApiController
   def create
     user = User.new(user_params)
     user.skip_password_validation = true
-
-    puts user.public_office
-    puts user.public_agency
 
     if user.save
       render json: user, status: 201

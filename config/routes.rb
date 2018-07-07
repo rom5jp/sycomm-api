@@ -10,12 +10,13 @@ Rails.application.routes.draw do
 
       resources :users do
         get :list_paginated, to: 'users#list_paginated', on: :collection
+        get :list_by_type, to: 'users#list_by_type', on: :collection
       end
 
       resources :public_offices, only: [:index]
       resources :public_agencies, only: [:index]
 
-      resources :activities, only: [:show, :update] do
+      resources :activities, only: [:show, :create, :update] do
         get 'list_last_user_activities', controller: :activities, action: :list_last_user_activities, on: :collection
         get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
       end

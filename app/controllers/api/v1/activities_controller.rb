@@ -21,6 +21,16 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
     render json: response_data, status: 200
   end
 
+  def create
+    entity = Activity.new(activity_params)
+
+    if entity.save
+      render json: entity, status: 201
+    else
+      render json: { errors: entity.errors }, status: 422
+    end
+  end
+
   def show
     entity = Activity.find(params[:id])
 
@@ -46,6 +56,7 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
     params.require(:activity).permit(
       :id,
       :name,
+      :description,
       :annotations,
       :status,
       :activity_type,

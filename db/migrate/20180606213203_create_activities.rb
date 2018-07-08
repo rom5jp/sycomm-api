@@ -6,8 +6,8 @@ class CreateActivities < ActiveRecord::Migration[5.1]
       t.string      :annotations
       t.integer     :status, null: false, default: 0
       t.integer     :activity_type
-      t.integer     :client_id
-      t.string      :client_name
+      t.integer     :customer_id
+      t.string      :customer_name
       t.belongs_to  :user, index: true
 
       t.timestamps

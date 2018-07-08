@@ -60,8 +60,8 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
       :annotations,
       :status,
       :activity_type,
-      :client_id,
-      :client_name,
+      :customer_id,
+      :customer_name,
       :user_id,
       :created_at,
       :updated_at

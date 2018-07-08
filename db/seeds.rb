@@ -35,12 +35,12 @@ User.create!(
 
 1.upto 10 do |n|
   Activity.create!(
-    name: "Atividade #{n}",
-    description: "Descrição da atividade #{n}",
-    user_id: Employee.first.id,
-    client_name: Customer.first.name,
-    client_id: Customer.first.id,
-    status: :not_started,
-    activity_type: :attendance
+      name: "Atividade #{n}",
+      description: "Descrição da atividade #{n}",
+      user_id: Employee.first.id,
+      customer_name: Customer.first.name,
+      customer_id: Customer.first.id,
+      status: :not_started,
+      activity_type: :attendance
   )
 end

@@ -1,5 +1,6 @@
 class Activity < ApplicationRecord
-  belongs_to :user, class_name: 'Employee'
+  belongs_to :user
+  belongs_to :agenda
 
   validates :name, presence: true
   validates :status, presence: true

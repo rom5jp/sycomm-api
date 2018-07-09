@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180606213203) do
+ActiveRecord::Schema.define(version: 20180708212637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,13 +18,16 @@ ActiveRecord::Schema.define(version: 20180606213203) do
   create_table "activities", force: :cascade do |t|
     t.string "name"
     t.string "description"
+    t.string "annotations"
     t.integer "status", default: 0, null: false
     t.integer "activity_type"
-    t.integer "client_id"
-    t.string "client_name"
+    t.integer "customer_id"
+    t.string "customer_name"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "agenda_id"
+    t.index ["agenda_id"], name: "index_activities_on_agenda_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
@@ -40,6 +43,15 @@ ActiveRecord::Schema.define(version: 20180606213203) do
     t.index ["city_id"], name: "index_addresses_on_city_id"
     t.index ["neighborhood_id"], name: "index_addresses_on_neighborhood_id"
     t.index ["state_id"], name: "index_addresses_on_state_id"
+  end
+
+  create_table "agendas", force: :cascade do |t|
+    t.string "name"
+    t.datetime "start_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_agendas_on_user_id"
   end
 
   create_table "cities", force: :cascade do |t|
@@ -127,6 +139,7 @@ ActiveRecord::Schema.define(version: 20180606213203) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "activities", "agendas"
   add_foreign_key "addresses", "cities"
   add_foreign_key "addresses", "neighborhoods"
   add_foreign_key "addresses", "states"

@@ -21,6 +21,8 @@ Rails.application.routes.draw do
         get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
       end
 
+      resources :agendas do
+      end
     end
   end
 end

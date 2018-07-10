@@ -1,4 +1,19 @@
 class Api::V1::ActivitiesController < Api::V1::BaseApiController
+  def list_all_paginated
+    page_number = params[:page_number] || 1
+    per_page = params[:per_page] || 10
+
+    activities = Activity.order(id: :asc)
+                         .page(page_number)
+                         .per(per_page)
+
+    response_data = {
+        data: activities,
+        total_count: Activity.count
+    }
+    render json: response_data, status: 200
+  end
+
   def list_last_user_activities
     activities = Activity.where(user: params[:user_id]).limit(params[:quant])
 

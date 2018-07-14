@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       end
 
       resources :agendas do
+        get 'list_all_paginated', controller: :agendas, action: :list_all_paginated, on: :collection
+        get 'list_user_agendas_paginated', controller: :agendas, action: :list_user_agendas_paginated, on: :collection
       end
     end
   end

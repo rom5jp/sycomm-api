@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180708212637) do
+ActiveRecord::Schema.define(version: 20180717004900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "activities", force: :cascade do |t|
     t.string "name"
@@ -52,6 +53,13 @@ ActiveRecord::Schema.define(version: 20180708212637) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_agendas_on_user_id"
+  end
+
+  create_table "agendas_customers", id: false, force: :cascade do |t|
+    t.bigint "agenda_id", null: false
+    t.bigint "customer_id", null: false
+    t.index ["agenda_id", "customer_id"], name: "index_agendas_customers_on_agenda_id_and_customer_id"
+    t.index ["customer_id", "agenda_id"], name: "index_agendas_customers_on_customer_id_and_agenda_id"
   end
 
   create_table "cities", force: :cascade do |t|

@@ -14,7 +14,6 @@ ActiveRecord::Schema.define(version: 20180717004900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
 
   create_table "activities", force: :cascade do |t|
     t.string "name"
@@ -24,12 +23,12 @@ ActiveRecord::Schema.define(version: 20180717004900) do
     t.integer "activity_type"
     t.integer "customer_id"
     t.string "customer_name"
-    t.bigint "user_id"
+    t.bigint "employee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "agenda_id"
     t.index ["agenda_id"], name: "index_activities_on_agenda_id"
-    t.index ["user_id"], name: "index_activities_on_user_id"
+    t.index ["employee_id"], name: "index_activities_on_employee_id"
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -48,11 +47,11 @@ ActiveRecord::Schema.define(version: 20180717004900) do
 
   create_table "agendas", force: :cascade do |t|
     t.string "name"
-    t.datetime "start_date"
+    t.datetime "start_date", default: "2018-07-25 02:20:40", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_agendas_on_user_id"
+    t.bigint "employee_id"
+    t.index ["employee_id"], name: "index_agendas_on_employee_id"
   end
 
   create_table "agendas_customers", id: false, force: :cascade do |t|

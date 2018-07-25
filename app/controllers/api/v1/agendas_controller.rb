@@ -24,14 +24,12 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
 
     response_data = {
         data: agendas,
-        total_count: Agenda.where(user: params[:user_id]).count
+        total_count: Agenda.where(employee: params[:employee_id]).count
     }
     render json: response_data, status: 200
   end
 
   def create
-    entity = Agenda.new(agenda_params)
-
     if entity.save
       render json: entity, status: 201
     else
@@ -50,10 +48,22 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
   end
 
   def update
-    entity = Agenda.find(agenda_params[:id])
+    entity = Agenda.find(params[:id])
+    customers_cpf = params[:customers_cpf]
+
+    entity.name = params[:name]
+    entity.start_date = params[:start_date]
+    entity.employee_id = params[:employee_id]
+
+    if customers_cpf.present?
+      customers_cpf.each do |cpf|
+        cust = Customer.find_by(cpf: cpf)
+        entity.customers << cust
+      end
+    end
 
     begin
-      entity.update!(agenda_params)
+      entity.save!
       render json: entity, status: 200
     rescue Exception => msg
       render json: { errors: entity.errors }, status: 422
@@ -61,12 +71,12 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
   end
 
   def agenda_params
-    params.require(:agenda).permit(
+    params.permit(
         :id,
         :name,
         :start_date,
-        :user_id,
-        :user_name,
+        :employee_id,
+        :customers_cpf,
         :created_at,
         :updated_at
     )

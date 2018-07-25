@@ -15,7 +15,7 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
   end
 
   def list_last_user_activities
-    activities = Activity.where(user: params[:user_id]).limit(params[:quant])
+    activities = Activity.where(employee: params[:employee_id]).limit(params[:quant])
 
     render json: { data: activities }, status: 200
   end
@@ -31,7 +31,7 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
 
     response_data = {
       data: activities,
-      total_count: Activity.where(user: params[:user_id]).count
+      total_count: Activity.where(employee: params[:employee_id]).count
     }
     render json: response_data, status: 200
   end
@@ -77,7 +77,7 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
       :activity_type,
       :customer_id,
       :customer_name,
-      :user_id,
+      :employee_id,
       :created_at,
       :updated_at
     )

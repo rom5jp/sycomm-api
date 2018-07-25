@@ -8,7 +8,7 @@ class CreateActivities < ActiveRecord::Migration[5.1]
       t.integer     :activity_type
       t.integer     :customer_id
       t.string      :customer_name
-      t.belongs_to  :user, index: true
+      t.belongs_to  :employee, index: true
 
       t.timestamps
     end

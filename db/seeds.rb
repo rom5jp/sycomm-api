@@ -33,31 +33,63 @@ Employee.create!(
     password_confirmation: '123123'
 )
 
-Customer.create!(
+c1 = Customer.create!(
   name: 'Cliente 1',
   email: 'cliente1@mail.com',
   cpf: '07644271481',
   password: '123123',
   password_confirmation: '123123',
-  type: 'Customer',
   cellphone: '83996447337',
-  registration: 123123,
-  public_agency_id: 1,
-  public_office_id: 1
+  registration: '123123',
+  public_agency_id: PublicAgency.first.id,
+  public_office_id: PublicOffice.first.id
+)
+
+c2 = Customer.create!(
+  name: 'Cliente 2',
+  email: 'cliente2@mail.com',
+  cpf: '07644271482',
+  password: '123123',
+  password_confirmation: '123123',
+  cellphone: '83996447337',
+  registration: '123123',
+  public_agency_id: PublicAgency.second.id,
+  public_office_id: PublicOffice.second.id
+)
+
+c3 = Customer.create!(
+  name: 'Cliente 3',
+  email: 'cliente3@mail.com',
+  cpf: '07644271483',
+  password: '123123',
+  password_confirmation: '123123',
+  cellphone: '83996447337',
+  registration: '123123',
+  public_agency_id: PublicAgency.third.id,
+  public_office_id: PublicOffice.third.id
 )
 
 1.upto 15 do |n|
   Agenda.create!(
     name: "Agenda #{n}",
-    user_id: Employee.first.id
+    employee_id: Employee.first.id
   )
 end
+
+Agenda.first.customers << c1
+Agenda.first.customers << c2
+Agenda.second.customers << c3
+
+Employee.first.agendas << Agenda.first
+Employee.first.agendas << Agenda.second
+Employee.second.agendas << Agenda.third
+Employee.second.agendas << Agenda.fourth
 
 1.upto 15 do |n|
   Activity.create!(
     name: "Atividade #{n}",
     description: "Descrição da atividade #{n}",
-    user_id: Employee.first.id,
+    employee_id: Employee.first.id,
     customer_name: Customer.first.name,
     customer_id: Customer.first.id,
     status: :not_started,
@@ -70,7 +102,7 @@ end
   Activity.create!(
     name: "Atividade #{n}",
     description: "Descrição da atividade #{n}",
-    user_id: Employee.first.id,
+    employee_id: Employee.first.id,
     customer_name: Customer.first.name,
     customer_id: Customer.first.id,
     status: :not_started,
@@ -83,7 +115,7 @@ end
   Activity.create!(
     name: "Atividade #{n}",
     description: "Descrição da atividade #{n}",
-    user_id: Employee.second.id,
+    employee_id: Employee.second.id,
     customer_name: Customer.second.name,
     customer_id: Customer.second.id,
     status: :not_started,

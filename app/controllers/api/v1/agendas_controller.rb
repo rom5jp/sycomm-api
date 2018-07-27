@@ -49,17 +49,21 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
 
   def update
     entity = Agenda.find(params[:id])
-    customers_cpf = params[:customers_cpf]
+    customers_param = params[:customers]
 
     entity.name = params[:name]
     entity.start_date = params[:start_date]
     entity.employee_id = params[:employee_id]
 
-    if customers_cpf.present?
-      customers_cpf.each do |cpf|
-        cust = Customer.find_by(cpf: cpf)
-        entity.customers << cust
+    if customers_param.present?
+      retrieved_customers = []
+      customers_param.each do |customer|
+        retrieved_customer = Customer.find(customer['id'])
+        retrieved_customers << retrieved_customer
       end
+      entity.customers = retrieved_customers
+    elsif customers_param.count == 0
+      entity.customers.clear
     end
 
     begin
@@ -72,13 +76,7 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
 
   def agenda_params
     params.permit(
-        :id,
-        :name,
-        :start_date,
-        :employee_id,
-        :customers_cpf,
-        :created_at,
-        :updated_at
+      :id,
     )
   end
 end

@@ -14,7 +14,7 @@ class User < ApplicationRecord
   scope :customers, -> { where(type: 'Customer') }
 
   # CALLBACKS
-  before_validation :generate_uuid!
+  before_validation :generate_uuid!, :normalize_email
   before_create :downcase_email
 
   def password_required?
@@ -48,5 +48,10 @@ class User < ApplicationRecord
 
   def downcase_email
     self.email = self.email.delete(' ').downcase
+  end
+
+  def normalize_email
+    self.email = self.name.split(' ')[0] + self.registration.to_s +  '@mail.com' if self.email.blank?
+    downcase_email
   end
 end

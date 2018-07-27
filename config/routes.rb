@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :users do
         get :list_paginated, to: 'users#list_paginated', on: :collection
         get :list_by_type, to: 'users#list_by_type', on: :collection
+        get 'get_customer_by_cpf/:cpf', to: 'users#get_customer_by_cpf', on: :collection
       end
 
       resources :public_offices, only: [:index]

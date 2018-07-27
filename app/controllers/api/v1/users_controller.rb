@@ -94,6 +94,16 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     end
   end
 
+  def get_customer_by_cpf
+    entity = Customer.find_by(cpf: params[:cpf])
+
+    if entity.present?
+      render json: entity, status: 200
+    else
+      head 404
+    end
+  end
+
   def create
     user = User.new(user_params)
     user.skip_password_validation = true

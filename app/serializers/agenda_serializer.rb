@@ -7,7 +7,7 @@ class AgendaSerializer < ActiveModel::Serializer
              :created_at,
              :updated_at
 
-  # belongs_to :employee
+  belongs_to :employee
   has_many :customers
 
   def customers_cpf

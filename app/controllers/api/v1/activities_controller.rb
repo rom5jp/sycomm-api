@@ -24,10 +24,10 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
     page_number = params[:page_number] || 1
     per_page = params[:per_page] || 10
 
-    activities = Activity
-                  .order(id: :asc)
-                  .page(page_number)
-                  .per(per_page)
+    activities = Activity.where(employee: params[:employee_id])
+                         .order(id: :asc)
+                         .page(page_number)
+                         .per(per_page)
 
     response_data = {
       data: activities,

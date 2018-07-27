@@ -8,8 +8,8 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
                      .per(per_page)
 
     response_data = {
-        data: agendas,
-        total_count: Agenda.count
+      data: ActiveModel::SerializableResource.new(agendas),
+      total_count: Agenda.count
     }
     render json: response_data, status: 200
   end
@@ -23,8 +23,8 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
                     .per(per_page)
 
     response_data = {
-        data: agendas,
-        total_count: Agenda.where(employee: params[:employee_id]).count
+      data: agendas,
+      total_count: Agenda.where(employee: params[:employee_id]).count
     }
     render json: response_data, status: 200
   end

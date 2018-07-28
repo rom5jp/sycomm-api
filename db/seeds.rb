@@ -7,15 +7,16 @@
 #   Character.create(name: 'Luke', # movie: movies.first)
 #
 #
-Admin.create!(
+admin = Admin.create!(
   name: 'Admin',
   email: 'admin@gmail.com',
   cpf: '07644271481',
   password: '123123',
   password_confirmation: '123123'
 )
+puts "Admin criado: #{admin.id}"
 
-Employee.create!(
+f1 = Employee.create!(
   name: 'Funcionario 1',
   email: 'f1@mail.com',
   cpf: '07644271481',
@@ -23,8 +24,9 @@ Employee.create!(
   password: '123123',
   password_confirmation: '123123'
 )
+puts "Funcionario 1 criado: #{f1.id}"
 
-Employee.create!(
+f2 = Employee.create!(
     name: 'Funcionario 2',
     email: 'f2@mail.com',
     cpf: '07644271482',
@@ -32,6 +34,7 @@ Employee.create!(
     password: '123123',
     password_confirmation: '123123'
 )
+puts "Funcionario 2 criado: #{f2.id}"
 
 c1 = Customer.create!(
   name: 'Cliente 1',
@@ -44,6 +47,7 @@ c1 = Customer.create!(
   public_agency_id: PublicAgency.first.id,
   public_office_id: PublicOffice.first.id
 )
+puts "Cliente 1 criado: #{c1.id}"
 
 c2 = Customer.create!(
   name: 'Cliente 2',
@@ -56,6 +60,7 @@ c2 = Customer.create!(
   public_agency_id: PublicAgency.second.id,
   public_office_id: PublicOffice.second.id
 )
+puts "Cliente 2 criado: #{c2.id}"
 
 c3 = Customer.create!(
   name: 'Cliente 3',
@@ -68,6 +73,7 @@ c3 = Customer.create!(
   public_agency_id: PublicAgency.third.id,
   public_office_id: PublicOffice.third.id
 )
+puts "Cliente 3 criado: #{c3.id}"
 
 1.upto 15 do |n|
   Agenda.create!(
@@ -123,3 +129,5 @@ end
     agenda: Agenda.third
   )
 end
+
+puts "** Seeding finalizado **"

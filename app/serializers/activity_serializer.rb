@@ -11,6 +11,6 @@ class ActivitySerializer < ActiveModel::Serializer
              :created_at,
              :updated_at
 
-  # belongs_to :agenda
-  # belongs_to :employee
+  belongs_to :agenda
+  belongs_to :employee
 end

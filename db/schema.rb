@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20180717004900) do
 
   create_table "agendas", force: :cascade do |t|
     t.string "name"
-    t.datetime "start_date", default: "2018-07-25 02:20:40", null: false
+    t.date "start_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "employee_id"

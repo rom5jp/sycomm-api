@@ -16,6 +16,7 @@ class User < ApplicationRecord
   # CALLBACKS
   before_validation :generate_uuid!, :normalize_email
   before_create :downcase_email
+  before_update :strip_simple_address
 
   def password_required?
     return false if skip_password_validation
@@ -53,5 +54,13 @@ class User < ApplicationRecord
   def normalize_email
     self.email = self.name.split(' ')[0] + self.registration.to_s +  '@mail.com' if self.email.blank?
     downcase_email
+  end
+
+  def strip_simple_address
+    if self.simple_address.present?
+      puts ">>>>>>>>>>>>>>>>>>>>>> simple_adress antes: '#{self.simple_address}'"
+      self.simple_address = self.simple_address.strip
+      puts ">>>>>>>>>>>>>>>>>>>>>> simple_adress depois: '#{self.simple_address}'"
+    end
   end
 end

@@ -18,8 +18,10 @@ Rails.application.routes.draw do
       resources :public_agencies, only: [:index]
 
       resources :activities, only: [:show, :create, :update] do
-        get 'list_last_user_activities', controller: :activities, action: :list_last_user_activities, on: :collection
+        get 'list_employee_yesterday_activities', controller: :activities, action: :list_employee_yesterday_activities, on: :collection
+        get 'list_employee_day_activities', controller: :activities, action: :list_employee_day_activities, on: :collection
         get 'list_all_paginated', controller: :activities, action: :list_all_paginated, on: :collection
+        get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
         get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
       end
 

@@ -8,16 +8,30 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
                          .per(per_page)
 
     response_data = {
-        data: activities,
+        data: ActiveModel::SerializableResource.new(activities),
         total_count: Activity.count
     }
     render json: response_data, status: 200
   end
 
-  def list_last_user_activities
-    activities = Activity.where(employee: params[:employee_id]).limit(params[:quant])
+  def list_employee_yesterday_activities
+    agendas = Agenda.where(employee: params[:employee_id], start_date: Date.yesterday).includes(:activities)
+    activities = agendas.map { |agenda| agenda.activities.where(status: [1,2]) }
+    activities.flatten!
 
-    render json: { data: activities }, status: 200
+    render json: { data: ActiveModel::SerializableResource.new(activities) }, status: 200
+  end
+
+  def list_employee_day_activities
+    agendas = Agenda.where(employee: params[:employee_id], start_date: Date.current)
+
+    activities = agendas.map do |agenda|
+      agenda.activities
+    end
+
+    activities.flatten!
+
+    render json: { data: ActiveModel::SerializableResource.new(activities) }, status: 200
   end
 
   def list_user_activities_paginated
@@ -30,7 +44,7 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
                          .per(per_page)
 
     response_data = {
-      data: activities,
+      data: ActiveModel::SerializableResource.new(activities),
       total_count: Activity.where(employee: params[:employee_id]).count
     }
     render json: response_data, status: 200

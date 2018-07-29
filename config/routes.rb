@@ -22,12 +22,11 @@ Rails.application.routes.draw do
         get 'list_employee_day_activities', controller: :activities, action: :list_employee_day_activities, on: :collection
         get 'list_all_paginated', controller: :activities, action: :list_all_paginated, on: :collection
         get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
-        get 'list_user_activities_paginated', controller: :activities, action: :list_user_activities_paginated, on: :collection
       end
 
       resources :agendas do
         get 'list_all_paginated', controller: :agendas, action: :list_all_paginated, on: :collection
-        get 'list_user_agendas_paginated', controller: :agendas, action: :list_user_agendas_paginated, on: :collection
+        get 'list_employee_agendas_paginated', controller: :agendas, action: :list_employee_agendas_paginated, on: :collection
       end
     end
   end

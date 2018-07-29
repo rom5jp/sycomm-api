@@ -14,16 +14,18 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
     render json: response_data, status: 200
   end
 
-  def list_user_agendas_paginated
+
+  def list_employee_agendas_paginated
     page_number = params[:page_number] || 1
     per_page = params[:per_page] || 10
 
-    agendas = Agenda.order(id: :asc)
+    agendas = Agenda.where(employee_id: params[:employee_id])
                     .page(page_number)
                     .per(per_page)
+                    .order(id: :asc)
 
     response_data = {
-      data: agendas,
+      data: ActiveModel::SerializableResource.new(agendas),
       total_count: Agenda.where(employee: params[:employee_id]).count
     }
     render json: response_data, status: 200

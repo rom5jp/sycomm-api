@@ -57,10 +57,6 @@ class User < ApplicationRecord
   end
 
   def strip_simple_address
-    if self.simple_address.present?
-      puts ">>>>>>>>>>>>>>>>>>>>>> simple_adress antes: '#{self.simple_address}'"
-      self.simple_address = self.simple_address.strip
-      puts ">>>>>>>>>>>>>>>>>>>>>> simple_adress depois: '#{self.simple_address}'"
-    end
+    self.simple_address = self.simple_address.strip if self.simple_address.present?
   end
 end

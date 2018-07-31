@@ -5,8 +5,15 @@ class Api::V1::UsersController < Api::V1::BaseApiController
   def list_paginated
     page_number = params[:page_number] || 1
     per_page = params[:per_page] || 10
-
+    sort_field = if params['sortField'].blank? then 'name' else params['sortField'] end
+    sort_direction = if params['sortDirection'].blank? then :asc else params['sortDirection'] end
+    search_field = if params['searchField'].blank? then 'name' else params['searchField'] end
+    search_text = if params['searchText'].blank? then '' else params['searchText'] end
     user_type = params['user_type']
+    order_clause = { sort_field => sort_direction }
+    where_clause = "users.#{search_field} LIKE ?", "%#{search_text}%"
+
+    users_count = 0
 
     case user_type
     when 'Admin'
@@ -19,11 +26,13 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                     'users.cellphone',
                     'users.whatsapp',
                     'users.simple_address',
-                    'users.type'
-                  )
-                  .order(id: :asc)
+                    'users.type')
+                  .where(where_clause)
+                  .order(order_clause)
                   .page(page_number)
                   .per(per_page)
+
+      users_count = User.admins.where(where_clause).count
     when 'Employee'
       users = User.employees
                   .select(
@@ -35,11 +44,13 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                     'users.cellphone',
                     'users.whatsapp',
                     'users.simple_address',
-                    'users.type'
-                  )
-                  .order(id: :asc)
+                    'users.type')
+                  .where(where_clause)
+                  .order(order_clause)
                   .page(page_number)
                   .per(per_page)
+
+      users_count = User.employees.where(where_clause).count
     when 'Customer'
       users = User.customers
                   .joins('INNER JOIN public_offices ON public_offices.id = users.public_office_id')
@@ -55,16 +66,21 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                     'users.whatsapp',
                     'users.simple_address',
                     'public_offices.name as public_office',
-                    'public_agencies.name as public_agency'
-                  )
-                  .order(id: :asc)
+                    'public_agencies.name as public_agency')
+                  .where(where_clause)
+                  .order(order_clause)
                   .page(page_number)
                   .per(per_page)
+
+      users_count = User.customers
+                        .joins('INNER JOIN public_offices ON public_offices.id = users.public_office_id')
+                        .joins('INNER JOIN public_agencies ON public_agencies.id = users.public_agency_id')
+                        .where(where_clause).count
     end
 
     response_data = {
       data: users,
-      total_count: User.where(type: user_type).count
+      total_count: users_count
     }
     render json: response_data, status: 200
   end

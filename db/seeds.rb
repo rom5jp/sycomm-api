@@ -36,6 +36,16 @@ f2 = Employee.create!(
 )
 puts "Funcionario 2 criado: #{f2.id}"
 
+f3 = Employee.create!(
+    name: 'Funcionario 3',
+    email: 'f3@mail.com',
+    cpf: '07644271483',
+    cellphone: '83888888888',
+    password: '123123',
+    password_confirmation: '123123'
+)
+puts "Funcionario 3 criado: #{f3.id}"
+
 c1 = Customer.create!(
   name: 'Cliente 1',
   email: 'cliente1@mail.com',
@@ -90,6 +100,8 @@ Employee.first.agendas << Agenda.first
 Employee.first.agendas << Agenda.second
 Employee.second.agendas << Agenda.third
 Employee.second.agendas << Agenda.fourth
+f3.agendas << Agenda.where(name: 'Agenda 4').first
+f3.agendas << Agenda.where(name: 'Agenda 5').first
 
 1.upto 15 do |n|
   Activity.create!(
@@ -127,6 +139,19 @@ end
     status: :not_started,
     activity_type: :attendance,
     agenda: Agenda.third
+  )
+end
+
+33.upto 38 do |n|
+  Activity.create!(
+      name: "Atividade #{n}",
+      description: "Descrição da atividade #{n}",
+      employee_id: Employee.third.id,
+      customer_name: Customer.third.name,
+      customer_id: Customer.third.id,
+      status: :not_started,
+      activity_type: :attendance,
+      agenda: Agenda.fourth
   )
 end
 

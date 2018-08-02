@@ -14,10 +14,15 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
     render json: response_data, status: 200
   end
 
+  def list_day_activities
+    agendas = Agenda.where(start_date: Date.current).includes(:activities)
+    activities = agendas.map { |agenda| agenda.activities }.flatten!
+    render json: { data: ActiveModel::SerializableResource.new(activities) }, status: 200
+  end
+
   def list_employee_yesterday_activities
     agendas = Agenda.where(employee: params[:employee_id], start_date: Date.yesterday).includes(:activities)
-    activities = agendas.map { |agenda| agenda.activities.where(status: [1,2]) }
-    activities.flatten!
+    activities = agendas.map { |agenda| agenda.activities.where(status: [1,2]) }.flatten!
 
     render json: { data: ActiveModel::SerializableResource.new(activities) }, status: 200
   end

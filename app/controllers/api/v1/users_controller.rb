@@ -147,6 +147,12 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     head 204
   end
 
+  def list_employees_with_day_activities
+    employees_with_day_activities = Employee.distinct.joins(:agendas).where("agendas.start_date = ?", Date.current).order(name: :asc)
+    json_result = (ActiveModel::SerializableResource.new(employees_with_day_activities)).to_json
+    render json: json_result, status: 200
+  end
+
   private
 
   def user_params

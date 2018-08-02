@@ -12,12 +12,14 @@ Rails.application.routes.draw do
         get :list_paginated, to: 'users#list_paginated', on: :collection
         get :list_by_type, to: 'users#list_by_type', on: :collection
         get 'get_customer_by_cpf/:cpf', to: 'users#get_customer_by_cpf', on: :collection
+        get 'list_employees_with_day_activities', controller: :users, action: :list_employees_with_day_activities, on: :collection
       end
 
       resources :public_offices, only: [:index]
       resources :public_agencies, only: [:index]
 
       resources :activities, only: [:show, :create, :update] do
+        get 'list_day_activities', controller: :activities, action: :list_day_activities, on: :collection
         get 'list_employee_yesterday_activities', controller: :activities, action: :list_employee_yesterday_activities, on: :collection
         get 'list_employee_day_activities', controller: :activities, action: :list_employee_day_activities, on: :collection
         get 'list_all_paginated', controller: :activities, action: :list_all_paginated, on: :collection

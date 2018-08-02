@@ -4,5 +4,4 @@ class Agenda < ApplicationRecord
   has_and_belongs_to_many :customers, join_table: 'agendas_customers'
 
   validates :name, presence: true
-  validates :start_date, presence: true
 end

@@ -93,8 +93,8 @@ puts "Cliente 3 criado: #{c3.id}"
 end
 
 Agenda.first.customers << c1
-Agenda.first.customers << c2
-Agenda.second.customers << c3
+Agenda.second.customers << c2
+Agenda.third.customers << c3
 
 Employee.first.agendas << Agenda.first
 Employee.first.agendas << Agenda.second

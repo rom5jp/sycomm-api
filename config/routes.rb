@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       resources :public_offices, only: [:index]
       resources :public_agencies, only: [:index]
 
-      resources :activities, only: [:show, :create, :update] do
+      resources :activities do
         get 'list_day_activities', controller: :activities, action: :list_day_activities, on: :collection
         get 'list_employee_yesterday_activities', controller: :activities, action: :list_employee_yesterday_activities, on: :collection
         get 'list_employee_day_activities', controller: :activities, action: :list_employee_day_activities, on: :collection

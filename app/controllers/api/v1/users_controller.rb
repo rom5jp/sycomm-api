@@ -11,7 +11,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     search_text = if params['searchText'].blank? then '' else params['searchText'] end
     user_type = params['user_type']
     order_clause = { sort_field => sort_direction }
-    where_clause = "users.#{search_field} LIKE ?", "%#{search_text}%"
+    where_clause = "lower(users.#{search_field}) LIKE ?", "%#{search_text.downcase}%"
 
     users_count = 0
 

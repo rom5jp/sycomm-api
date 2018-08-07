@@ -55,6 +55,24 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
     render json: response_data, status: 200
   end
 
+  def list_by_agenda_paginated
+    page_number = params[:page_number] || 1
+    per_page = params[:per_page] || 10
+
+    activities = Activity.where(agenda_id: params[:agenda_id])
+                       .order(id: :asc)
+                       .page(page_number)
+                       .per(per_page)
+
+    total_count = Activity.where(agenda_id: params[:agenda_id]).count
+
+    response_data = {
+        data: ActiveModel::SerializableResource.new(activities),
+        total_count: total_count
+    }
+    render json: response_data, status: 200
+  end
+
   def create
     entity = Activity.new(activity_params)
 
@@ -86,8 +104,17 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
     end
   end
 
+  def destroy
+    begin
+      Activity.find(activity_params[:id]).destroy!
+      head 204
+    rescue
+      render nothing: true, status: 404
+    end
+  end
+
   def activity_params
-    params.require(:activity).permit(
+    params.permit(
       :id,
       :name,
       :description,

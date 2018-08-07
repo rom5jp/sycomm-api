@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       resources :agendas do
         get 'list_all_paginated', controller: :agendas, action: :list_all_paginated, on: :collection
         get 'list_employee_agendas_paginated', controller: :agendas, action: :list_employee_agendas_paginated, on: :collection
+        delete 'delete-many', controller: :agendas, action: :delete_many, on: :collection
       end
     end
   end

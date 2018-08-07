@@ -120,6 +120,17 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
     end
   end
 
+  def delete_many
+    agendas_ids = params['body']['agendas_ids'].split(",").map { |id| id.to_i }
+    begin
+      Agenda.where(id: agendas_ids).each { |agenda| agenda.destroy! }
+      head 204
+    rescue Exception => e
+      puts e.message
+      render json: e.message, status: 500
+    end
+  end
+
   private
 
   def agenda_params
@@ -129,7 +140,8 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
       :start_date,
       :end_date,
       :employee_id,
-      customers_cpf: []
+      customers_cpf: [],
+      agendas_ids: []
     )
   end
 end

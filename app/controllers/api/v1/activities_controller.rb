@@ -122,7 +122,6 @@ class Api::V1::ActivitiesController < Api::V1::BaseApiController
       :status,
       :activity_type,
       :customer_id,
-      :customer_name,
       :employee_id,
       :created_at,
       :updated_at

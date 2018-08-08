@@ -100,6 +100,17 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     render json: users, status: 200
   end
 
+  def list_customers_by_agenda
+    begin
+      customers = Agenda.find(params[:agenda_id]).customers
+      customers_json = ActiveModel::SerializableResource.new(customers).to_json
+      render json: customers_json, status: 200
+    rescue Exception => e
+      puts e.message
+      render json: { errors: e.message }, status: 500
+    end
+  end
+
   def show
     user = User.find(params[:id])
 

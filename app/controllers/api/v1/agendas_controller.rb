@@ -81,7 +81,14 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
 
     entity.name = params[:name]
     entity.start_date = params[:start_date]
-    entity.employee_id = params[:employee_id]
+
+    if entity.employee_id != params[:employee_id]
+      entity.employee_id = params[:employee_id]
+
+      entity.activities.each do |activity|
+        activity.update(employee_id: params[:employee_id])
+      end
+    end
 
     if customers_param.present?
       retrieved_customers = []

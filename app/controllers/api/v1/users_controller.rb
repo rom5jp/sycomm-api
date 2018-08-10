@@ -90,11 +90,11 @@ class Api::V1::UsersController < Api::V1::BaseApiController
 
     case user_type
       when 'Admin'
-        users = User.admins
+        users = User.admins.order(name: :asc)
       when 'Employee'
-        users = User.employees
+        users = User.employees.order(name: :asc)
       when 'Customer'
-        users = User.customers
+        users = User.customers.order(name: :asc)
     end
 
     render json: users, status: 200

@@ -16,8 +16,12 @@ Rails.application.routes.draw do
         get 'list_customers_by_agenda', controller: :users, action: :list_customers_by_agenda, on: :collection
       end
 
-      resources :public_offices, only: [:index]
-      resources :public_agencies, only: [:index]
+      resources :public_offices do
+        get :list_paginated, to: 'public_offices#list_paginated', on: :collection
+      end
+      resources :public_agencies do
+        get :list_paginated, to: 'public_agencies#list_paginated', on: :collection
+      end
 
       resources :activities do
         get 'list_day_activities', controller: :activities, action: :list_day_activities, on: :collection

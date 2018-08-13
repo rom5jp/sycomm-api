@@ -14,7 +14,7 @@ namespace :populate_db do
   task import_from_csv: :environment do
     csv_filename = 'import_users_from_csv.sql'
 
-    puts "> Importing data from #{File.expand_path(csv_filename, '../sycomm-api/db/scripts')}..."
+    puts "> Importing data from #{File.expand_path(csv_filename, '../../db/scripts')}..."
     ActiveRecord::Base.connection.execute(IO.read(File.expand_path(csv_filename, '../sycomm-api/db/scripts')))
 
     puts ">> END\n"

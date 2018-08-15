@@ -2,6 +2,7 @@ class AgendaSerializer < ActiveModel::Serializer
   attributes :id,
              :name,
              :start_date,
+             :end_date,
              :employee_id,
              :customers_cpf,
              :created_at,

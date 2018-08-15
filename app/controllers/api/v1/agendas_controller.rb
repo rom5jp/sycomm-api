@@ -81,6 +81,7 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
 
     entity.name = params[:name]
     entity.start_date = params[:start_date]
+    entity.end_date = params[:end_date]
 
     if entity.employee_id != params[:employee_id]
       entity.employee_id = params[:employee_id]

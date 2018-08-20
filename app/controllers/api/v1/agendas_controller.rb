@@ -129,7 +129,7 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
   end
 
   def delete_many
-    agendas_ids = params['body']['agendas_ids'].split(",").map { |id| id.to_i }
+    agendas_ids = params['agendas_ids'].split(",").map { |id| id.to_i }
     begin
       Agenda.where(id: agendas_ids).each { |agenda| agenda.destroy! }
       head 204

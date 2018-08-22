@@ -99,7 +99,8 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
         begin
           retrieved_customer.save!
         rescue Exception => msg
-          render json: { errors: "Não foi possível atualizar esta Agenda porque o Cliente '#{retrieved_customer.name}' possui dados inconsistentes, como segue: <br><br> #{msg.to_s}. <br><br> Por favor, corrija os dados deste Cliente e em seguida tente atualizar a Agenda novamente." }, status: 422
+          error_message = "Não foi possível atualizar esta Agenda porque o Cliente '#{retrieved_customer.name}' possui dados inconsistentes, como segue: <br><br> #{msg.to_s}. <br><br> Por favor, corrija os dados deste Cliente e em seguida tente atualizar a Agenda novamente."
+          render json: { message: error_message }, status: 422
           return
         end
 

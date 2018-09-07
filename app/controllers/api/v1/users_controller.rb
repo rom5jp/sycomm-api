@@ -10,9 +10,8 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     search_field = if params['searchField'].blank? then 'name' else params['searchField'] end
     search_text = if params['searchText'].blank? then '' else params['searchText'] end
     user_type = params['user_type']
+    where_clause = prepare_where_clause(search_field, search_text)
     order_clause = { sort_field => sort_direction }
-    where_clause = "lower(users.#{search_field}) LIKE ?", "%#{search_text.downcase}%"
-
     users_count = 0
 
     case user_type
@@ -165,6 +164,15 @@ class Api::V1::UsersController < Api::V1::BaseApiController
   end
 
   private
+
+  def prepare_where_clause(search_field, search_text)
+    if search_field == 'public_office' or search_field == 'public_agency'
+      where_clause = "users.#{search_field}_id = #{search_text}" if search_text.present?
+    else
+      where_clause = "lower(users.#{search_field}) LIKE ?", "%#{search_text.downcase}%"
+    end
+    where_clause
+  end
 
   def user_params
     params.require(:user).permit(

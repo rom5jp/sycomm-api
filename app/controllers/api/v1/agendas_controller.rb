@@ -2,14 +2,22 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
   def list_all_paginated
     page_number = params[:page_number] || 1
     per_page = params[:per_page] || 10
+    sort_field = if params['sortField'].blank? then 'name' else params['sortField'] end
+    sort_direction = if params['sortDirection'].blank? then :asc else params['sortDirection'] end
+    search_field = if params['searchField'].blank? then 'name' else params['searchField'] end
+    search_text = if params['searchText'].blank? then '' else params['searchText'] end
+    where_clause = prepare_where_clause(search_field, search_text)
+    order_clause = { sort_field => sort_direction }
 
     agendas = Agenda.order(id: :asc)
-                     .page(page_number)
-                     .per(per_page)
+                    .where(where_clause)
+                    .order(order_clause)
+                    .page(page_number)
+                    .per(per_page)
 
     response_data = {
       data: ActiveModel::SerializableResource.new(agendas),
-      total_count: Agenda.count
+      total_count: Agenda.where(where_clause).count
     }
     render json: response_data, status: 200
   end
@@ -152,5 +160,9 @@ class Api::V1::AgendasController < Api::V1::BaseApiController
       customers_cpf: [],
       agendas_ids: []
     )
+  end
+
+  def prepare_where_clause(search_field, search_text)
+    where_clause = "lower(agendas.#{search_field}) LIKE ?", "%#{search_text.downcase}%"
   end
 end

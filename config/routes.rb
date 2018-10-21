@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         get 'get_customer_by_cpf/:cpf', to: 'users#get_customer_by_cpf', on: :collection
         get 'list_employees_with_day_activities', controller: :users, action: :list_employees_with_day_activities, on: :collection
         get 'list_customers_by_agenda', controller: :users, action: :list_customers_by_agenda, on: :collection
+        get 'sync_confirme_online', controller: :users, action: :sync_confirme_online, on: :collection
       end
 
       resources :public_offices do

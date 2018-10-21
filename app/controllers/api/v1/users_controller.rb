@@ -1,3 +1,7 @@
+require 'net/http'
+require 'active_support/core_ext'
+require 'json'
+
 class Api::V1::UsersController < Api::V1::BaseApiController
   def index
   end
@@ -10,10 +14,9 @@ class Api::V1::UsersController < Api::V1::BaseApiController
     search_field = if params['searchField'].blank? then 'name' else params['searchField'] end
     search_text = if params['searchText'].blank? then '' else params['searchText'] end
     user_type = params['user_type']
+    where_clause = prepare_where_clause(search_field, search_text)
     order_clause = { sort_field => sort_direction }
-    where_clause = "lower(users.#{search_field}) LIKE ?", "%#{search_text.downcase}%"
-
-    users_count = 0
+    rows_count = 0
 
     case user_type
     when 'Admin'
@@ -32,7 +35,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                   .page(page_number)
                   .per(per_page)
 
-      users_count = User.admins.where(where_clause).count
+      rows_count = User.admins.where(where_clause).count
     when 'Employee'
       users = User.employees
                   .select(
@@ -50,7 +53,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                   .page(page_number)
                   .per(per_page)
 
-      users_count = User.employees.where(where_clause).count
+      rows_count = User.employees.where(where_clause).count
     when 'Customer'
       users = User.customers
                   .joins('INNER JOIN public_offices ON public_offices.id = users.public_office_id')
@@ -72,7 +75,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
                   .page(page_number)
                   .per(per_page)
 
-      users_count = User.customers
+      rows_count = User.customers
                         .joins('INNER JOIN public_offices ON public_offices.id = users.public_office_id')
                         .joins('INNER JOIN public_agencies ON public_agencies.id = users.public_agency_id')
                         .where(where_clause).count
@@ -80,7 +83,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
 
     response_data = {
       data: users,
-      total_count: users_count
+      total_count: rows_count
     }
     render json: response_data, status: 200
   end
@@ -160,8 +163,27 @@ class Api::V1::UsersController < Api::V1::BaseApiController
 
   def list_employees_with_day_activities
     employees_with_day_activities = Employee.distinct.joins(:agendas).where("agendas.start_date = ?", Date.current).order(name: :asc)
-    json_result = (ActiveModel::SerializableResource.new(employees_with_day_activities)).to_json
+    json_result = (ActiveModelSerializers::SerializableResource.new(employees_with_day_activities)).to_json
     render json: json_result, status: 200
+  end
+
+  def sync_confirme_online
+    operation = ENV['OP']
+    user = ENV['US']
+    password = ENV['PS']
+    sg = ENV['SG']
+    cc = confirme_online_params[:cpf]
+
+    url_text = "http://consulta.confirmeonline.com.br/Integracao/?OP=#{operation}&US=#{user}&PS=#{password}&SG=#{sg}&CC=#{cc}"
+    url = URI.parse(url_text)
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) { |http|
+      http.request(req)
+    }
+
+    json_response = Hash.from_xml(res.body).to_json
+
+    render json: json_response, status: 200
   end
 
   private
@@ -180,5 +202,17 @@ class Api::V1::UsersController < Api::V1::BaseApiController
       :public_office_id,
       :type
     )
+  end
+
+  def confirme_online_params
+    params.permit(:cpf)
+  end
+
+  def prepare_where_clause(search_field, search_text)
+    if search_field == 'public_office' or search_field == 'public_agency'
+      where_clause = "users.#{search_field}_id = #{search_text}" if search_text.present?
+    else
+      where_clause = "lower(users.#{search_field}) LIKE ?", "%#{search_text.downcase}%"
+    end
   end
 end

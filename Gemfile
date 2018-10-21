@@ -35,6 +35,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'spring-commands-rspec' # it speeds up rspec tests with spring-commands
+  gem 'dotenv-rails'
 end
 
 group :development do

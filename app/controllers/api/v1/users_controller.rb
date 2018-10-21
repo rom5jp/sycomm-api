@@ -205,7 +205,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
   end
 
   def confirme_online_params
-'   params'.permit(:cpf)
+    params.permit(:cpf)
   end
 
   def prepare_where_clause(search_field, search_text)

@@ -168,11 +168,11 @@ class Api::V1::UsersController < Api::V1::BaseApiController
   end
 
   def sync_confirme_online
-    operation = confirme_online_params[:OP]
-    user = confirme_online_params[:US]
-    password = confirme_online_params[:PS]
-    sg = confirme_online_params[:SG]
-    cc = confirme_online_params[:CC]
+    operation = ENV['OP']
+    user = ENV['US']
+    password = ENV['PS']
+    sg = ENV['SG']
+    cc = confirme_online_params[:cpf]
 
     url_text = "http://consulta.confirmeonline.com.br/Integracao/?OP=#{operation}&US=#{user}&PS=#{password}&SG=#{sg}&CC=#{cc}"
     url = URI.parse(url_text)
@@ -205,13 +205,7 @@ class Api::V1::UsersController < Api::V1::BaseApiController
   end
 
   def confirme_online_params
-    params.permit(
-      :OP,
-      :US,
-      :PS,
-      :SG,
-      :CC
-    )
+'   params'.permit(:cpf)
   end
 
   def prepare_where_clause(search_field, search_text)

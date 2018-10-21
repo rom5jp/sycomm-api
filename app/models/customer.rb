@@ -6,7 +6,7 @@ class Customer < User
   validates :cpf, presence: true, length: { is: 11 }
   validates :registration, presence: true
   validates :landline, allow_blank: true, length: { minimum: 8 }
-  validates :cellphone, presence: true, length: { is: 11 }
+  validates :cellphone, presence: true, length: { minimum: 8 }
   validates :whatsapp, allow_blank: true, length: { minimum: 8 }
   # validates :agendas, uniqueness: true
 end

@@ -47,6 +47,7 @@ group :development do
   gem 'capistrano3-puma', require: false
   gem 'capistrano-rbenv', require: false
   gem 'capistrano-secrets-yml', require: false
+  gem 'capistrano-dotenv', require: false
 end
 
 group :production do

@@ -6,7 +6,7 @@ set :repo_url, "git@bitbucket.org:romeromedeiros/sycomm-api.git"
 
 set :deploy_to, "/var/www/sycomm-api"
  
-append :linked_files, "config/database.yml
+append :linked_files, "config/database.yml"
 append :linked_dirs, "log", "tmp"
  
 set :keep_releases, 5

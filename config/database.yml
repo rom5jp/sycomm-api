@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: sycomm_production
-  username: sycomm
+  database: sycomm_api_production
+  username: deploy
   password: <%= ENV['DB_PASSWORD'] %>

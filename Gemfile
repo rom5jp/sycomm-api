@@ -32,7 +32,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'spring-commands-rspec' # it speeds up rspec tests with spring-commands
-  gem 'dotenv-rails', require: 'dotenv/rails-now'
 end
 
 group :development do
@@ -54,6 +53,8 @@ group :production do
   gem 'puma'#, '~> 3.7'
   gem 'rails_12factor'
 end
+
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'rack-cors'
 gem 'rack-attack'

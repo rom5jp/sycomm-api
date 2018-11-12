@@ -52,6 +52,7 @@ end
 group :production do
   gem 'puma'#, '~> 3.7'
   gem 'rails_12factor'
+  gem 'listen', '>= 3.0.5', '< 3.2'
 end
 
 gem 'dotenv-rails', require: 'dotenv/rails-now'

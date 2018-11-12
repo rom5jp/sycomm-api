@@ -1,14 +1,14 @@
 upstream puma {
-  server unix:///home/deploy/apps/sycomm-api/shared/tmp/sockets/sycomm-api-puma.sock;
+  server unix:///home/root/apps/sycomm-api/shared/tmp/sockets/sycomm-api-puma.sock;
 }
 
 server {
   listen 80 default_server deferred;
-  server_name 191.252.2.192;
+  # server_name example.com;
 
-  root /home/deploy/apps/sycomm-api/current/public;
-  access_log /home/deploy/apps/sycomm-api/current/log/nginx.access.log;
-  error_log /home/deploy/apps/sycomm-api/current/log/nginx.error.log info;
+  root /home/root/apps/sycomm-api/current/public;
+  access_log /home/root/apps/sycomm-api/current/log/nginx.access.log;
+  error_log /home/root/apps/sycomm-api/current/log/nginx.error.log info;
 
   location ^~ /assets/ {
     gzip_static on;

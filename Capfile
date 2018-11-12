@@ -1,15 +1,11 @@
 require "capistrano/setup"
 require "capistrano/deploy"
-
-require 'capistrano/rails'
+require "capistrano/scm/git"
 require 'capistrano/bundler'
 require 'capistrano/rbenv'
-require 'capistrano/puma'
-
-# require "capistrano/scm/git"
-
 require 'capistrano/dotenv'
-# require 'capistrano/rails/migrations'
+require 'capistrano/puma'
+require 'capistrano/rails/migrations'
  
 install_plugin Capistrano::SCM::Git
 install_plugin Capistrano::Puma

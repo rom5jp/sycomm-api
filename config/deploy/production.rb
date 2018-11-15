@@ -6,6 +6,7 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
+server '191.252.2.192', user: 'deploy', roles: %w{app db web}
 
 
 
@@ -59,12 +60,3 @@
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
-
-set :branch, 'master'
-set :server_address, '191.252.2.192'
- 
-ask(:password, nil, echo: false)
-server fetch(:server_address), user: "deploy", roles: %w{app db web}
- 
-set :nginx_server_name, fetch(:server_address)
-set :puma_preload_app, true

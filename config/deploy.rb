@@ -4,50 +4,11 @@ lock "~> 3.11.0"
 set :application, "sycomm-api"
 set :repo_url, "git@bitbucket.org:romeromedeiros/sycomm-api.git"
 
-set :deploy_to, "/var/www/sycomm-api"
- 
-append :linked_files, "config/database.yml", "config/secrets.yml", ".env"
-append :linked_dirs, "log", "tmp"
- 
-set :keep_releases, 5
-set :migration_role, :app
-
-set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
-set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock"
-set :puma_access_log, "#{shared_path}/log/puma_access.log"
-set :puma_error_log, "#{shared_path}/log/puma_error.log"
- 
-set :nginx_sites_available_path, "/etc/nginx/sites-available"
-set :nginx_sites_enabled_path, "/etc/nginx/sites-enabled"
- 
-set :rbenv_type, :user # or :system, depends on your rbenv setup
-set :rbenv_ruby, '2.5.1'
-
-namespace :puma do
-  desc 'Create Puma dirs'
-  task :create_dirs do
-    on roles(:app) do
-      execute "mkdir #{shared_path}/tmp/sockets -p"
-      execute "mkdir #{shared_path}/tmp/pids -p"
-    end
-  end
- 
-  desc "Restart Nginx"
-  task :nginx_restart do
-    on roles(:app) do
-      execute "sudo service nginx restart"
-    end
-  end
- 
-  before :start, :create_dirs
-  after :start, :nginx_restart
-end
-
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, "/home/deploy/sycomm-api"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -60,10 +21,10 @@ end
 # set :pty, true
 
 # Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
+append :linked_files, "config/database.yml", "config/secrets.yml"
 
 # Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", "public/system", "public/uploads"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
